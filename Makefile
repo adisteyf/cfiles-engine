@@ -1,5 +1,5 @@
 CXX = g++
-INCLUDES = -I/usr/include -I/usr/include/glm -I./include -I./fe-headers
+INCLUDES = -I/usr/include -I./include -I./fe-headers -I./usr/include/glm
 CXXFLAGS = $(INCLUDES) -Wall -O2
 LDFLAGS = -L./lib -lglfw3 -lglm -lglad
 
@@ -10,7 +10,7 @@ OBJS := $(OBJS:src/%.c=obj/%.o)
 all: bin/main
 
 bin/main: $(OBJS)
-	@mkdir -p bin obj
+	@mkdir -p bin
 	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
 
 obj/%.o: src/%.cpp
@@ -19,7 +19,7 @@ obj/%.o: src/%.cpp
 
 obj/%.o: src/%.c
 	@mkdir -p obj
-	$(CC) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
 	rm -rf bin obj

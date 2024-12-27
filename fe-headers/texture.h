@@ -14,8 +14,8 @@ public:
     int width, height, nrChannels;
     GLuint unit;
 
-    Texture(unsigned char *data, const char* texType, GLuint slot, GLenum format, GLenum pixelType);
-    Texture(const char *path, const char* texType, GLuint slot, GLenum format, GLenum pixelType);
+    Texture(unsigned char *data, const char* texType, GLuint slot);
+    Texture(const char *path, const char* texType, GLuint slot);
     ~Texture();
 
     unsigned char* getData(const char *path);
