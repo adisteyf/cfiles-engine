@@ -19,11 +19,11 @@ uniform mat4 camMatrix;
 
 void main()
 {
-   FragPos = vec3(model * translation * -rotation * scale * vec4(aPos, 1.0));
+   FragPos = vec3(model * translation * inverse(rotation) * scale * vec4(aPos, 1.0));
    Normal = aNormal;
    
    ourColor = aColor;
-   ourTexCoord = mat2(0.0, -1.0, 1.0) * aTexCoord;
+   ourTexCoord = mat2(0.0, -1.0, 1.0, 0.0) * aTexCoord;
 
    gl_Position = camMatrix * vec4(FragPos, 1.0);
 }
