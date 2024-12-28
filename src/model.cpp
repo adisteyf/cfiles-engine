@@ -48,7 +48,7 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
     json node = JSON["nodes"][nextNode];
 
     glm::vec3 translation = glm::vec3(0.0f, 0.0f, 0.0f);
-    if (node.find("translation") != node.end());
+    if (node.find("translation") != node.end())
     {
         float transValues[3];
         for (unsigned int i=0; i<node["translation"].size(); i++)
@@ -82,7 +82,7 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
     glm::mat4 matNode = glm::mat4(1.0f);
     if (node.find("matrix") != node.end())
     {
-        float matValues[3];
+        float matValues[16];
         for (unsigned int i=0; i<node["matrix"].size(); i++)
             matValues[i] = node["matrix"][i];
         matNode = glm::make_mat4(matValues);
@@ -155,7 +155,7 @@ std::vector<float> Model::getFloats(json accessor)
     json bufferView = JSON["bufferViews"][buffViewInd];
     unsigned int byteOffset = bufferView["byteOffset"];
 
-    unsigned int numPerVert;
+    unsigned int numPerVert=0;
     if (type == "SCALAR") numPerVert = 1;
     else if (type == "VEC2") numPerVert = 2;
     else if (type == "VEC3") numPerVert = 3;
@@ -168,9 +168,9 @@ std::vector<float> Model::getFloats(json accessor)
 
     unsigned int beginningOfData = byteOffset+accByteOffset;
     unsigned int lengthOfData = count * 4 * numPerVert;
-    for (unsigned int i = beginningOfData; i < beginningOfData+lengthOfData; i)
+    for (unsigned int i = beginningOfData; i < beginningOfData+lengthOfData; i += 4)
     {
-        unsigned char bytes[] = { data[i++], data[i++], data[i++], data[i++] };
+        unsigned char bytes[] = { data[i], data[i+1], data[i+2], data[i+3] };
         float value;
         std::memcpy(&value, bytes, sizeof(float));
         floatVec.push_back(value);
@@ -195,9 +195,9 @@ std::vector<GLuint> Model::getIndices(json accessor)
 
     if (componentType == 5125)
     {
-        for (unsigned int i = beginningOfData; i < byteOffset + accByteOffset + count * 4; i)
+        for (unsigned int i = beginningOfData; i < byteOffset + accByteOffset + count * 4; i += 4)
         {
-            unsigned char bytes[] = { data[i++], data[i++], data[i++], data[i++] };
+            unsigned char bytes[] = { data[i], data[i+1], data[i+2], data[i+3] };
             unsigned int value;
             std::memcpy(&value, bytes, sizeof(unsigned int));
             indices.push_back((GLuint)value);
@@ -206,9 +206,9 @@ std::vector<GLuint> Model::getIndices(json accessor)
 
     else if (componentType == 5123)
     {
-        for (unsigned int i = beginningOfData; i < byteOffset + accByteOffset + count * 2; i)
+        for (unsigned int i = beginningOfData; i < byteOffset + accByteOffset + count * 2; i += 2)
         {
-            unsigned char bytes[] = { data[i++], data[i++] };
+            unsigned char bytes[] = { data[i], data[i+1] };
             unsigned short value;
             std::memcpy(&value, bytes, sizeof(unsigned short));
             indices.push_back((GLuint)value);
@@ -217,9 +217,9 @@ std::vector<GLuint> Model::getIndices(json accessor)
 
     else if (componentType == 5122)
     {
-        for (unsigned int i = beginningOfData; i < byteOffset + accByteOffset + count * 2; i)
+        for (unsigned int i = beginningOfData; i < byteOffset + accByteOffset + count * 2; i += 2)
         {
-            unsigned char bytes[] = { data[i++], data[i++] };
+            unsigned char bytes[] = { data[i], data[i+1] };
             short value;
             std::memcpy(&value, bytes, sizeof(short));
             indices.push_back((GLuint)value);
@@ -281,7 +281,7 @@ std::vector<Vertex> Model::assembleVertices
 )
 {
     std::vector<Vertex> vertices;
-    for (int i=0; i<positions.size(); i++)
+    for (size_t i=0; i<positions.size(); i++)
     {
         vertices.push_back
         (
@@ -302,33 +302,51 @@ std::vector<Vertex> Model::assembleVertices
 
 std::vector<glm::vec2> Model::groupFloatsVec2(std::vector<float> floatVec)
 {
-    std::vector<glm::vec2> vectors;
-    for (int i=0; i<floatVec.size(); i)
-    {
-        vectors.push_back(glm::vec2(floatVec[i++], floatVec[i++]));
-    }
+	const unsigned int floatsPerVector = 2;
+	
+	std::vector<glm::vec2> vectors;
+	for (unsigned int i=0; i<floatVec.size(); i += floatsPerVector)
+	{
+		vectors.push_back(glm::vec2(0, 0));
 
-    return vectors;
+		for (unsigned int j=0; j<floatsPerVector; j++)
+		{
+			vectors.back()[j] = floatVec[i+j];
+		}
+	}
+	return vectors;
 }
 
 std::vector<glm::vec3> Model::groupFloatsVec3(std::vector<float> floatVec)
 {
-    std::vector<glm::vec3> vectors;
-    for (int i=0; i<floatVec.size(); i)
-    {
-        vectors.push_back(glm::vec3(floatVec[i++], floatVec[i++], floatVec[i++]));
-    }
+	const unsigned int floatsPerVector = 3;
 
-    return vectors;
+	std::vector<glm::vec3> vectors;
+	for (unsigned int i = 0; i < floatVec.size(); i += floatsPerVector)
+	{
+		vectors.push_back(glm::vec3(0, 0, 0));
+
+		for (unsigned int j = 0; j < floatsPerVector; j++)
+		{
+			vectors.back()[j] = floatVec[i + j];
+		}
+	}
+	return vectors;
 }
 
 std::vector<glm::vec4> Model::groupFloatsVec4(std::vector<float> floatVec)
 {
-    std::vector<glm::vec4> vectors;
-    for (int i=0; i<floatVec.size(); i)
-    {
-        vectors.push_back(glm::vec4(floatVec[i++], floatVec[i++], floatVec[i++], floatVec[i++]));
-    }
+	const unsigned int floatsPerVector = 4;
 
-    return vectors;
+	std::vector<glm::vec4> vectors;
+	for (unsigned int i = 0; i < floatVec.size(); i += floatsPerVector)
+	{
+		vectors.push_back(glm::vec4(0, 0, 0, 0));
+
+		for (unsigned int j = 0; j < floatsPerVector; j++)
+		{
+			vectors.back()[j] = floatVec[i + j];
+		}
+	}
+	return vectors;
 }
