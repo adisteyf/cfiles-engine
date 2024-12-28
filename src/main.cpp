@@ -45,7 +45,7 @@ int fe_main() {
     felog("fe_main(): initializing camera...");
     Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
 
-    Model model("models/sword/scene.gltf");
+    Model model("assets/models/sword/scene.gltf");
 
     felog("fe_main(): entering main loop...");
     while (!window.shouldClose() && !fe_status) {

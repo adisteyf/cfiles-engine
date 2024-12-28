@@ -3,11 +3,14 @@
 Model::Model(const char * file)
 {
     std::string text = get_file_contents(file);
+    std::cout << "Next is JSON parse" << std::endl;
     JSON = json::parse(text);
 
+    std::cout << "Next is getData" << std::endl;
     Model::file = file;
     data = getData();
 
+    std::cout << "Next is traverseNode" << std::endl;
     traverseNode(0);
 }
 
@@ -128,8 +131,10 @@ std::string Model::get_file_contents(const std::string& filename)
 std::vector<unsigned char> Model::getData()
 {
     std::string bytesText;
-    std::string uri = JSON["buffers"][0];
+    std::cout << "Next is URI get" << std::endl; 
+    std::string uri = JSON["buffers"][0]["uri"];
 
+    std::cout << "Next is file to string" << std::endl;
     std::string fileStr = std::string(file);
     std::string fileDir = fileStr.substr(0, fileStr.find_last_of('/')+1);
     bytesText = get_file_contents(fileDir+uri);
