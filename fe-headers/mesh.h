@@ -6,6 +6,7 @@
 #include "EBO.h"
 #include "camera.h"
 #include "texture.h"
+#include "debug.h"
 
 class Mesh {
 public:

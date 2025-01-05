@@ -11,15 +11,7 @@
 #include "window.h"
 #include "model.h"
 
-void fe_debug()
-{
-    GLenum err;
-    while((err = glGetError()) != GL_NO_ERROR)
-    {
-        std::cout << "GL ERROR DETECTED: ";
-        std::cout << err << std::endl;
-    }
-}
+
 
 int fe_main() {
     felog("fe_main(): initializing GLFW...");
@@ -72,7 +64,7 @@ int fe_main() {
         window.swapBuffers();
 
         felog("fe_main(): starting debug loop...");
-        fe_debug();
+        //fe_debug();
         felog("fe_main(): end of main loop");
     }
 
