@@ -11,6 +11,16 @@
 #include "window.h"
 #include "model.h"
 
+void fe_debug()
+{
+    GLenum err;
+    while((err = glGetError()) != GL_NO_ERROR)
+    {
+        std::cout << "GL ERROR DETECTED: ";
+        std::cout << err << std::endl;
+    }
+}
+
 int fe_main() {
     felog("fe_main(): initializing GLFW...");
     Window::initGLFW();
@@ -26,11 +36,9 @@ int fe_main() {
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
     felog("fe_main(): initializing light model...");
-    glm::vec3 lightPos(1.0f, 1.0f, 1.0f);
+    glm::vec3 lightPos(0.5f, 0.5f, 0.5f);
     glm::mat4 lightModel = glm::mat4(1.0f);
     lightModel = glm::translate(lightModel, lightPos);
-    lightModel = glm::scale(lightModel, glm::vec3(0.2f));
-
 
     felog("fe_main(): binding shader...");
     shader.bind();
@@ -47,6 +55,7 @@ int fe_main() {
 
     Model model("assets/models/sword/scene.gltf");
 
+
     felog("fe_main(): entering main loop...");
     while (!window.shouldClose() && !fe_status) {
         felog("fe_main(): polling events...");
@@ -61,6 +70,9 @@ int fe_main() {
 
         felog("fe_main(): swapping buffers...");
         window.swapBuffers();
+
+        felog("fe_main(): starting debug loop...");
+        fe_debug();
         felog("fe_main(): end of main loop");
     }
 

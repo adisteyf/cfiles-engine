@@ -56,7 +56,10 @@ void Mesh::draw
 		textures[i].bind();
     }
 
+    //std::cout << glGetError() << std::endl;
+    std::cout << "next is camPos uniform" << std::endl;
     glUniform3f(glGetUniformLocation(shader.getProgram(), "camPos"), camera.pos.x, camera.pos.y, camera.pos.z);
+    //std::cout << glGetError() << std::endl;
     camera.matrix(shader, "camMatrix");
 
     glm::mat4 trans = glm::mat4(1.0f);
@@ -67,12 +70,18 @@ void Mesh::draw
     rot = glm::mat4_cast(rotation);
     sca = glm::scale(sca, scale);
 
+    std::cout << "next is translation" << std::endl;
     glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "translation"), 1, GL_FALSE, glm::value_ptr(trans));
+    //std::cout << glGetError() << std::endl;
     glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "rotation"), 1, GL_FALSE, glm::value_ptr(rot));
+    //std::cout << glGetError() << std::endl;
     glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "scale"), 1, GL_FALSE, glm::value_ptr(sca));
+    //std::cout << glGetError() << std::endl;
     glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(matrix));
+    //std::cout << glGetError() << std::endl;
 
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    std::cout << "end of mesh draw" << std::endl;
 }
 
 Mesh::~Mesh()

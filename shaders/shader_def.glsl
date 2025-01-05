@@ -10,16 +10,16 @@ out vec3 Normal;
 out vec3 ourColor;
 out vec2 ourTexCoord;
 
+uniform mat4 camMatrix;
 uniform mat4 model;
 uniform mat4 translation;
 uniform mat4 rotation;
 uniform mat4 scale;
 
-uniform mat4 camMatrix;
 
 void main()
 {
-   FragPos = vec3(model * translation * inverse(rotation) * scale * vec4(aPos, 1.0));
+   FragPos = vec3(model * translation * -rotation * scale * vec4(aPos, 1.0));
    Normal = aNormal;
    
    ourColor = aColor;
