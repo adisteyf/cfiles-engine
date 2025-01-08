@@ -22,7 +22,7 @@ void Model::draw(Shader &shader, Camera &camera)
     }
 }
 
-std::string get_file_contents(const char* filename)
+std::string Model::get_file_contents(const char* filename)
 {
     std::ifstream in(filename, std::ios::binary);
     if (in)
