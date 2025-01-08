@@ -1,20 +1,16 @@
 #include "VAO.h"
+#include <iostream>
 
 VAO::VAO()
 {
     glGenVertexArrays(1, &VAObuff);
 }
 
-VAO::~VAO()
-{
-    free();
-}
-
 void VAO::makeAttrib(VBO& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, void* offset)
 {
     VBO.bind();
-    glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
     glEnableVertexAttribArray(layout);
+    glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
     VBO.unbind();
 }
 
@@ -31,4 +27,5 @@ void VAO::unbind()
 void VAO::free()
 {
     glDeleteVertexArrays(1, &VAObuff);
+    std::cout << "VAO was freed" << std::endl;
 }

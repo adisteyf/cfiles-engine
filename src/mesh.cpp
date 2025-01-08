@@ -7,14 +7,15 @@ Mesh::Mesh(std::vector<Vertex> &vertices, std::vector<GLuint> &indices, std::vec
     Mesh::textures = textures;
 
     vao.bind();
+    fe_debug();
 
     VBO vbo(vertices);
     EBO ebo(indices);
 
-    vao.makeAttrib(vbo, 0, 3, GL_FLOAT, sizeof(Vertex), (void*)0);
-    vao.makeAttrib(vbo, 1, 3, GL_FLOAT, sizeof(Vertex), (void*)(3 * sizeof(float)));
-    vao.makeAttrib(vbo, 2, 3, GL_FLOAT, sizeof(Vertex), (void*)(6 * sizeof(float)));
-    vao.makeAttrib(vbo, 3, 2, GL_FLOAT, sizeof(Vertex), (void*)(9 * sizeof(float)));
+    vao.makeAttrib(vbo, 0, 3, GL_FLOAT, 11*sizeof(float), (void*)0);
+    vao.makeAttrib(vbo, 1, 3, GL_FLOAT, 11*sizeof(float), (void*)(3 * sizeof(float)));
+    vao.makeAttrib(vbo, 2, 3, GL_FLOAT, 11*sizeof(float), (void*)(6 * sizeof(float)));
+    vao.makeAttrib(vbo, 3, 2, GL_FLOAT, 11*sizeof(float), (void*)(9 * sizeof(float)));
     
     vao.unbind();
     vbo.unbind();
@@ -33,8 +34,9 @@ void Mesh::draw
 
 {
     shader.bind();
+    std::cout << glGetError() << std::endl;
     vao.bind(); // error here
-    fe_debug();
+    std::cout << glGetError() << std::endl;
 
     unsigned int numDiffuse = 0;
     unsigned int numSpecular = 0;
@@ -76,6 +78,7 @@ void Mesh::draw
     glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(matrix));
 
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    std::cout << glGetError() << std::endl;
     std::cout << "end of mesh draw" << std::endl;
 }
 

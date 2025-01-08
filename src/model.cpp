@@ -22,6 +22,22 @@ void Model::draw(Shader &shader, Camera &camera)
     }
 }
 
+std::string get_file_contents(const char* filename)
+{
+    std::ifstream in(filename, std::ios::binary);
+    if (in)
+    {
+        std::string contents;
+        in.seekg(0, std::ios::end);
+        contents.resize(in.tellg());
+        in.seekg(0, std::ios::beg);
+        in.read(&contents[0], contents.size());
+        in.close();
+        return(contents);
+    }
+    throw(errno);
+}
+
 void Model::loadMesh(unsigned int indMesh)
 {
     unsigned int posAccInd = JSON["meshes"][indMesh]["primitives"][0]["attributes"]["POSITION"];
@@ -117,17 +133,6 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
     }
 }
 
-std::string Model::get_file_contents(const std::string& filename)
-{
-    std::ifstream file(filename);
-    if (!file) {
-        throw std::runtime_error("Can't open the file: " + filename);
-    }
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    return buffer.str();
-}
-
 std::vector<unsigned char> Model::getData()
 {
     std::string bytesText;
@@ -137,7 +142,7 @@ std::vector<unsigned char> Model::getData()
     std::cout << "Next is file to string" << std::endl;
     std::string fileStr = std::string(file);
     std::string fileDir = fileStr.substr(0, fileStr.find_last_of('/')+1);
-    bytesText = get_file_contents(fileDir+uri);
+    bytesText = get_file_contents((fileDir+uri).c_str());
 
     std::vector<unsigned char> data(bytesText.begin(), bytesText.end());
     return data;

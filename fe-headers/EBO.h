@@ -9,7 +9,6 @@ public:
     GLuint EBObuff;
 
     EBO(std::vector<GLuint> &indices);
-    ~EBO();
     void bind();
     void unbind();
     void free();

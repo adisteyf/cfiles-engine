@@ -58,13 +58,12 @@ int fe_main() {
         felog("fe_main(): updating camera...");
         camera.inputs(window.getWindow());
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
+
         model.draw(shader, camera);
 
         felog("fe_main(): swapping buffers...");
         window.swapBuffers();
 
-        felog("fe_main(): starting debug loop...");
-        //fe_debug();
         felog("fe_main(): end of main loop");
     }
 

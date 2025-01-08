@@ -1,12 +1,15 @@
 #include <iostream>
 #include <glad/glad.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 void fe_debug()
 {
-    GLenum err;
-    while((err = glGetError()) != GL_NO_ERROR)
-    {
-        std::cout << "GL ERROR: ";
-        std::cout << err << std::endl;
+    GLenum code;
+    const GLubyte* string;
+    code = glGetError();
+    if (code != GL_NO_ERROR) {
+        string = gluErrorString(code);
+        fprintf(stderr, "OpenGL error: %s (%d)\n", string, code);
     }
 }

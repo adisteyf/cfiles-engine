@@ -18,7 +18,7 @@ Texture::Texture(const char *path, const char* texType, GLuint slot) {
     unit = slot;
     glBindTexture(GL_TEXTURE_2D, id);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -92,7 +92,7 @@ Texture::Texture(unsigned char *data, const char* texType, GLuint slot) {
     unit = slot;
     glBindTexture(GL_TEXTURE_2D, id);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -149,7 +149,6 @@ Texture::Texture(unsigned char *data, const char* texType, GLuint slot) {
     }
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    stbi_image_free(data);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
