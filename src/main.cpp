@@ -10,7 +10,7 @@
 #include "texture.h"
 #include "window.h"
 #include "model.h"
-
+#include "debug.h"
 
 
 int fe_main() {
@@ -41,6 +41,10 @@ int fe_main() {
 
     felog("fe_main(): enabling depth test...");
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    felog("next is glDebugMessageCallback");
+    glDebugMessageCallback(/*Debug::*/debugCallback, 0);
 
     felog("fe_main(): initializing camera...");
     Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));

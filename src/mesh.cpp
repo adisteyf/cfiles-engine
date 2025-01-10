@@ -32,9 +32,7 @@ void Mesh::draw
 )
 {
     shader.bind();
-    std::cout << glGetError() << std::endl;
     vao.bind();
-    std::cout << glGetError() << std::endl;
 
     unsigned int numDiffuse = 0;
     unsigned int numSpecular = 0;
@@ -70,7 +68,5 @@ void Mesh::draw
     glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "scale"), 1, GL_FALSE, glm::value_ptr(sca));
     glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(matrix));
 
-    std::cout << "??: " << glGetError() << std::endl;
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-    std::cout << "glDrawElements(): " << glGetError() << std::endl;
 }
