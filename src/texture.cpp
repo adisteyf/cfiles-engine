@@ -171,6 +171,6 @@ void Texture::remove() {
     glDeleteTextures(1, &id);
 }
 
-Texture::~Texture() {
+/*Texture::~Texture() {
     remove();
-}
+}*/

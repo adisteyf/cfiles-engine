@@ -15,4 +15,7 @@ void GLAPIENTRY debugCallback
     const   GLchar * message,
     const   void   * userParam
 );
+
+
+void not1stCall();
 #endif

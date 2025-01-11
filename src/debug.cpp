@@ -4,6 +4,7 @@
 #include <GL/glu.h>
 #include "debug.h"
 
+int countCall = 0;
 void fe_debug()
 {
     GLenum code;
@@ -88,4 +89,12 @@ void GLAPIENTRY debugCallback
     printf("\tmsg: %s\n", message);
 
     putchar('\n');
+    if (countCall==2) {
+        not1stCall();
+    }
+    countCall++;
+}
+
+void not1stCall() {
+    puts("not 1st call");
 }

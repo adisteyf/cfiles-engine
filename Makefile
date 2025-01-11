@@ -1,6 +1,7 @@
 CXX = g++
 INCLUDES = -I/usr/include -I./include -I./fe-headers -I./usr/include/glm
-CXXFLAGS = $(INCLUDES) -Wall -O2
+OPTIMIZE ?= -O2
+CXXFLAGS = $(INCLUDES) -Wall $(OPTIMIZE)
 LDFLAGS = -L./lib -lglfw3 -lglm -lglad -lGLU
 
 SRCS = $(wildcard src/*.cpp src/*.c)
