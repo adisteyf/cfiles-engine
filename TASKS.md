@@ -1,3 +1,9 @@
 Tasks:
 
-- Remove destructor of **VAO** 'cause after `Mesh::Mesh` its destructs. This causes **GL_INVALID_OPERATION** in `draw` function. (`vao.bind()`).
+- [X] Fix error with loading texture
+- [X] Add **CMakeLists.txt**
+- [ ] Create depth buffer
+
+#
+
+- [ ] Add **Vulkan** API

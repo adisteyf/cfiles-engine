@@ -15,7 +15,8 @@
 
 # Description
 
-This is a simple engine for creating and rendering 2D objects using OpenGL.
+This is a simple engine for creating and rendering 3D objects using OpenGL.
+*(Vulkan soon)*.
 
 # Features
 
@@ -30,6 +31,7 @@ This is a simple engine for creating and rendering 2D objects using OpenGL.
 - GLFW
 - GLAD
 - GLM
+- GLU
 
 #
 
