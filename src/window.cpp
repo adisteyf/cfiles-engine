@@ -1,12 +1,14 @@
 #include "window.h"
+#include "fe-settings.h"
 
 Window::Window(int w, int h, const char* t) : width(w), height(h), title(t) {
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, FE_GLFW_MAJOR);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, FE_GLFW_MINOR);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
 
     window = glfwCreateWindow(width, height, title, nullptr, nullptr);
+    //std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
     if (!window) {
         std::cerr << "Failed to create GLFW window" << std::endl;
         glfwTerminate();

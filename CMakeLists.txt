@@ -23,6 +23,9 @@ target_link_libraries(main ${OPENGL_LIBRARIES})
 find_package(glfw3 REQUIRED)
 target_link_libraries(main glfw)
 
+## glm
+find_package(glm REQUIRED)
+#target_link_libraries(main glm)
 
 # headers
 include_directories(

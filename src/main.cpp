@@ -44,7 +44,7 @@ int fe_main() {
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     felog("next is glDebugMessageCallback");
-    glDebugMessageCallback(/*Debug::*/debugCallback, 0);
+    glDebugMessageCallback(debugCallback, 0);
 
     felog("fe_main(): initializing camera...");
     Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));

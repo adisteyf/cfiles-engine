@@ -9,7 +9,8 @@
 
 #define LOG_LEVEL_INFO
 
-
+#define FE_GLFW_MAJOR 4
+#define FE_GLFW_MINOR 3
 
 #define RED "\033[31m"
 #define RESET "\033[0m"
