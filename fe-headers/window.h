@@ -15,7 +15,7 @@ private:
 
 public:
     Window(int w, int h, const char* t);
-    ~Window();
+    //~Window();
     
     bool shouldClose();
     void swapBuffers();
@@ -28,6 +28,7 @@ public:
     void clear();
     static void initGLFW();
     static void terminateGLFW();
+    void killWindow();
 };
 
 #endif // WINDOW_CLASS_FE

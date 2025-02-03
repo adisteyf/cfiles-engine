@@ -1,13 +1,12 @@
 #include "mesh.h"
 
-Mesh::Mesh(std::vector<Vertex> &vertices, std::vector<GLuint> &indices, std::vector<Texture> &textures)
+Mesh::Mesh(std::vector <Vertex>& vertices, std::vector <GLuint>& indices, std::vector <Texture>& textures)
 {
     Mesh::vertices = vertices;
     Mesh::indices = indices;
     Mesh::textures = textures;
 
     vao.bind();
-
     VBO vbo(vertices);
     EBO ebo(indices);
 
@@ -15,22 +14,22 @@ Mesh::Mesh(std::vector<Vertex> &vertices, std::vector<GLuint> &indices, std::vec
     vao.makeAttrib(vbo, 1, 3, GL_FLOAT, sizeof(Vertex), (void*)(3 * sizeof(float)));
     vao.makeAttrib(vbo, 2, 3, GL_FLOAT, sizeof(Vertex), (void*)(6 * sizeof(float)));
     vao.makeAttrib(vbo, 3, 2, GL_FLOAT, sizeof(Vertex), (void*)(9 * sizeof(float)));
-    
+
     vao.unbind();
     vbo.unbind();
     ebo.unbind();
 }
 
+Mesh::~Mesh() {}
 void Mesh::draw
 (
-    Shader &shader,
-    Camera &camera,
+    Shader& shader,
+    Camera& camera,
     glm::mat4 matrix,
     glm::vec3 translation,
     glm::quat rotation,
     glm::vec3 scale
 )
-
 {
     shader.bind();
     vao.bind();
@@ -40,22 +39,19 @@ void Mesh::draw
 
     for (unsigned int i = 0; i < textures.size(); i++)
     {
-        std::string number;
+        std::string num;
         std::string type = textures[i].type;
-
         if (type == "diffuse")
         {
-            number = std::to_string(numDiffuse++);
+            num = std::to_string(numDiffuse++);
         }
         else if (type == "specular")
         {
-            number = std::to_string(numSpecular++);
+            num = std::to_string(numSpecular++);
         }
-
-		textures[i].texUnit(shader, (type + number).c_str(), i);
-		textures[i].bind();
+        textures[i].texUnit(shader, (type + num).c_str(), i);
+        textures[i].bind();
     }
-
     glUniform3f(glGetUniformLocation(shader.getProgram(), "camPos"), camera.pos.x, camera.pos.y, camera.pos.z);
     camera.matrix(shader, "camMatrix");
 
@@ -73,9 +69,4 @@ void Mesh::draw
     glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(matrix));
 
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-}
-
-Mesh::~Mesh()
-{
-    vao.free();
 }

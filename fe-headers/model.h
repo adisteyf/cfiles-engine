@@ -10,6 +10,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "shader.h"
 
 using json = nlohmann::json;
 
@@ -17,7 +18,7 @@ class Model {
 public:
     Model(const char * name);
     void draw(Shader &shader, Camera &camera);
-    std::string get_file_contents(const std::string& filename);
+    std::string get_file_contents(const char* filename);
 private:
     const char * file;
     std::vector<unsigned char> data;

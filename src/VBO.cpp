@@ -7,11 +7,6 @@ VBO::VBO(std::vector<Vertex> &vertices)
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
 }
 
-VBO::~VBO()
-{
-    free();
-}
-
 void VBO::bind()
 {
     glBindBuffer(GL_ARRAY_BUFFER, VBObuff);

@@ -16,7 +16,6 @@ public:
 
     Texture(unsigned char *data, const char* texType, GLuint slot);
     Texture(const char *path, const char* texType, GLuint slot);
-    ~Texture();
 
     unsigned char* getData(const char *path);
     void texUnit(Shader& shader, const char *uniform, GLuint unit);
