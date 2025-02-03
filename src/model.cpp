@@ -3,14 +3,11 @@
 Model::Model(const char * file)
 {
     std::string text = get_file_contents(file);
-    std::cout << "Next is JSON parse" << std::endl;
     JSON = json::parse(text);
 
-    std::cout << "Next is getData" << std::endl;
     Model::file = file;
     data = getData();
 
-    std::cout << "Next is traverseNode" << std::endl;
     traverseNode(0);
 }
 

@@ -21,7 +21,9 @@ void fe_panic()
 int main()
 {
     signal(SIGINT, fe_signal_handler);
-    int status = fe_main();
-    
-    return status;
+    //int status = fe_main();
+    //printf("BOOT: fe_main() killed with status (%d)\n", status);
+    fe_main();
+
+    return 0;
 }

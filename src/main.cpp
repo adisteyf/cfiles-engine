@@ -13,7 +13,7 @@
 #include "debug.h"
 
 
-int fe_main() {
+void fe_main() {
     felog("fe_main(): initializing GLFW...");
     Window::initGLFW();
     felog("fe_main(): initializing window...");
@@ -47,7 +47,7 @@ int fe_main() {
     glDebugMessageCallback(debugCallback, 0);
 
     felog("fe_main(): initializing camera...");
-    Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
+    Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(/*0.0f, 0.0f, 2.0f*/-2.f, 8.f, 4.f));
 
     Model model("assets/models/sword/scene.gltf");
 
@@ -72,6 +72,7 @@ int fe_main() {
     }
 
     felog("fe_main(): exiting main loop (end of fe_main)...");
-    return 0;
+    shader.killShader();
+    window.killWindow();
 }
 

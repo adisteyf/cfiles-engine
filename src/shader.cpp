@@ -95,13 +95,12 @@ Shader::Shader(const char *filename) {
     delete[] shader_str;
 }
 
-Shader::~Shader() {
+/*Shader::~Shader() {
     killShader();
     freeShader();
-}
+}*/
 
-void Shader::bind()
-{
+void Shader::bind() {
     glUseProgram(program);
 }
 
@@ -120,6 +119,7 @@ void Shader::setUniform(const char *name, glm::mat4 val)
 void Shader::killShader()
 {
     glDeleteProgram(program);
+    freeShader();
 }
 
 void Shader::freeShader()

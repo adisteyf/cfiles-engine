@@ -1,11 +1,8 @@
 #include "camera.h"
 
 bool firstClick = true;
-
-//Camera::Camera(int w, int h, glm::vec3 pos)
-//    : w(w), h(h), pos(pos) {}
-
 Camera::~Camera() {}
+// TODO: add lastMouseX/Y and use it instead glfwSetCursorPos()
 
 void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane) {
     glm::mat4 view = glm::mat4(1.0f);
@@ -47,8 +44,11 @@ void Camera::inputs(GLFWwindow *window) {
         speed = 0.1f;
     }
 
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-	{
+    std::cout << pos.x << std::endl;
+    std::cout << pos.y << std::endl;
+    std::cout << pos.z << std::endl;
+
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
         if (firstClick) {
@@ -56,26 +56,29 @@ void Camera::inputs(GLFWwindow *window) {
             firstClick = false;
         }
 
-        double mouseX;
-        double mouseY;
+        double mouseX, mouseY;
         glfwGetCursorPos(window, &mouseX, &mouseY);
 
-        float rotX = sensitivity * (float)(mouseY - (h / 2)) / h;
-        float rotY = sensitivity * (float)(mouseX - (w / 2)) / w;
+        float deltaX = (float)(mouseX - (w / 2));
+        float deltaY = (float)(mouseY - (h / 2));
 
+        float rotX = sensitivity * deltaY / h;
+        float rotY = sensitivity * deltaX / w;
         glm::vec3 newOrientation = glm::rotate(orientation, glm::radians(-rotX), glm::normalize(glm::cross(orientation, up)));
 
-        if (abs(glm::angle(newOrientation, up) - glm::radians(90.0f)) <= glm::radians(85.0f))
-        {
+        if (abs(glm::angle(newOrientation, up) - glm::radians(90.0f)) <= glm::radians(85.0f)) {
             orientation = newOrientation;
         }
 
         orientation = glm::rotate(orientation, glm::radians(-rotY), up);
 
+        std::cout << orientation.x << std::endl;
+        std::cout << orientation.y << std::endl;
+        std::cout << orientation.z << std::endl;
         glfwSetCursorPos(window, (w / 2), (h / 2));
-	}
-	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
-	{
+    }
+
+    else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         firstClick = true;
     }
