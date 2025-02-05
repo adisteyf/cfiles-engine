@@ -3,6 +3,7 @@
 bool firstClick = true;
 Camera::~Camera() {}
 // TODO: add lastMouseX/Y and use it instead glfwSetCursorPos()
+int showImGuiState = GLFW_RELEASE;
 
 void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane) {
     glm::mat4 view = glm::mat4(1.0f);
@@ -44,11 +45,18 @@ void Camera::inputs(GLFWwindow *window) {
         speed = 0.1f;
     }
 
+    int showImGuiCurr = glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT);
+    if (showImGuiCurr == GLFW_PRESS && showImGuiState == GLFW_RELEASE) {
+        showImGui = !showImGui;
+    }
+
+    showImGuiState = showImGuiCurr;
+
     std::cout << pos.x << std::endl;
     std::cout << pos.y << std::endl;
     std::cout << pos.z << std::endl;
 
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !showImGui) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
         if (firstClick) {

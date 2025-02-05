@@ -12,8 +12,27 @@
 #include "model.h"
 #include "debug.h"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
-void fe_main() {
+
+
+
+void setupImGui(GLFWwindow * window)
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO(); (void)io;
+
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 130");
+}
+
+void fe_main()
+{
     felog("fe_main(): initializing GLFW...");
     Window::initGLFW();
     felog("fe_main(): initializing window...");
@@ -49,6 +68,10 @@ void fe_main() {
     felog("fe_main(): initializing camera...");
     Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(/*0.0f, 0.0f, 2.0f*/-2.f, 8.f, 4.f));
 
+    felog("fe_main(): initializing imgui...");
+    setupImGui(window.getWindow());
+
+
     Model model("assets/models/sword/scene.gltf");
 
 
@@ -64,6 +87,16 @@ void fe_main() {
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
         model.draw(shader, camera);
+        if (camera.showImGui) {
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            ImGui::ShowDemoWindow();
+            ImGui::Render();
+
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        }
 
         felog("fe_main(): swapping buffers...");
         window.swapBuffers();

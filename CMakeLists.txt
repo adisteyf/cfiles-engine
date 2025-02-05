@@ -28,6 +28,10 @@ target_link_libraries(main glfw)
 find_package(glm REQUIRED)
 #target_link_libraries(main glm)
 
+## ImGui
+find_package(imgui REQUIRED)
+target_link_libraries(main imgui)
+
 # headers
 include_directories(
     ${CMAKE_SOURCE_DIR}/include
