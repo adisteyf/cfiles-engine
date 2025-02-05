@@ -120,7 +120,7 @@ float near = 0.1f;
 float far  = 100.f;
 
 float steepness = 0.5f;
-float offset = 5.0f;
+float offset = 30.0f;
 
 float linearizeDepth(float depth) {
     return (2.0 * near * far) / (far + near - (depth * 2.0 - 1.0) * (far - near));
