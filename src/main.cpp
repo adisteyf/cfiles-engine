@@ -2,20 +2,22 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <glad/glad.h>
+
 #include <vector>
 #include "fe-kernel.h"
 #include "fe-settings.h"
-#include "camera.h"
 #include "mesh.h"
 #include "texture.h"
 #include "window.h"
+#include "camera.h"
 #include "model.h"
 #include "debug.h"
+#include "input.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-
 
 
 
@@ -66,13 +68,14 @@ void fe_main()
     glDebugMessageCallback(debugCallback, 0);
 
     felog("fe_main(): initializing camera...");
-    Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(/*0.0f, 0.0f, 2.0f*/-2.f, 8.f, 4.f));
+    Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f));
 
     felog("fe_main(): initializing imgui...");
     setupImGui(window.getWindow());
 
 
     Model model("assets/models/sword/scene.gltf");
+    Input input;
 
 
     felog("fe_main(): entering main loop...");
@@ -83,6 +86,7 @@ void fe_main()
         window.clear();
 
         felog("fe_main(): updating camera...");
+        input.checkInput(window.getWindow(), camera);
         camera.inputs(window.getWindow());
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
 

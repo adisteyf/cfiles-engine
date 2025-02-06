@@ -19,32 +19,6 @@ void Camera::matrix(Shader &shader, const char *uniform) {
 }
 
 void Camera::inputs(GLFWwindow *window) {
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        pos += speed * orientation;
-    }
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        pos -= speed * glm::normalize(glm::cross(orientation, up));
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        pos -= speed * orientation;
-    }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        pos += speed * glm::normalize(glm::cross(orientation, up));
-    }
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-        pos += speed * up;
-    }
-    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-        pos -= speed * up;
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-        speed = 0.4f;
-    }
-    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE) {
-        speed = 0.1f;
-    }
-
     int showImGuiCurr = glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT);
     if (showImGuiCurr == GLFW_PRESS && showImGuiState == GLFW_RELEASE) {
         showImGui = !showImGui;
