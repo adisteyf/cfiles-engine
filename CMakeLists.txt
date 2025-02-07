@@ -32,6 +32,10 @@ find_package(glm REQUIRED)
 find_package(imgui REQUIRED)
 target_link_libraries(main imgui)
 
+## FreeType
+find_package(Freetype REQUIRED)
+target_link_libraries(main Freetype::Freetype)
+
 # headers
 include_directories(
     ${CMAKE_SOURCE_DIR}/include

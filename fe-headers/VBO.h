@@ -17,6 +17,7 @@ public:
     GLuint VBObuff;
 
     VBO(std::vector<Vertex> &vertices);
+    VBO();
     void bind();
     void unbind();
     void free();
