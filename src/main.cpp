@@ -79,9 +79,7 @@ void fe_main()
     Input input;
     TextRenderer txtRenderer;
     Shader txtShader("shaders/shader_txt.glsl");
-    VBO txt_vbo;
-    VAO txt_vao;
-    txtRenderer.init(shader, "assets/fonts/ProggyCleanRu.ttf");
+    txtRenderer.init(txtShader, "assets/fonts/ProggyCleanRu.ttf");
 
     felog("fe_main(): entering main loop...");
     while (!window.shouldClose() && !fe_status) {
@@ -107,7 +105,7 @@ void fe_main()
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         }
 
-        txtRenderer.RenderText(shader, "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        txtRenderer.RenderText(txtShader, "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
         felog("fe_main(): swapping buffers...");
         window.swapBuffers();
 

@@ -1,9 +1,6 @@
 #include "textRenderer.h"
 
 
-std::map<GLchar, Glyph> glyphs;
-VAO vao;
-
 void TextRenderer::init(Shader &shader, std::string font_path)
 {
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(WINDOW_WIDTH), 0.0f, static_cast<float>(WINDOW_HEIGHT));
@@ -67,19 +64,26 @@ void TextRenderer::init(Shader &shader, std::string font_path)
 
         glyphs.insert(std::pair<char, Glyph>(i, glyph));
         glBindTexture(GL_TEXTURE_2D, 0);
-
-        FT_Done_Face(face);
-        FT_Done_FreeType(ft);
-
-        vao.bind(); // <<
-        VBO vbo;
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-
-
-        vao.makeAttrib(vbo, 0, 4, GL_FLOAT, 4 * sizeof(float), 0);
-        vbo.unbind();
-        vao.unbind();
     }
+
+    printf("TXTRENDER: Killing FT...\n");
+    FT_Done_Face(face);
+    printf("TXTRENDER: next is FT_Done_FreeType(ft);\n");
+    FT_Done_FreeType(ft);
+    printf("TXTRENDER: next is vao.bind()\n");
+
+    vao.bind(); // <<
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+    glEnableVertexAttribArray(0);
+    printf("TXTRENDER: next is glVertexAttribPointer\n");
+
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+    printf("TXTRENDER: next is glBindBuffer\n");
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    printf("TXTRENDER: next is vao.unbind()\n");
+    vao.unbind();
 }
 
 void TextRenderer::RenderText(Shader &shader, std::string text, float x, float y, float scale, glm::vec3 color)

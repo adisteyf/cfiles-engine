@@ -36,8 +36,12 @@ struct Glyph {
 class TextRenderer
 {
     public:
+        std::map<GLchar, Glyph> glyphs;
+        VAO vao;
+        unsigned int vbo;
+
         void init(Shader &shader, std::string font_path);
-        static void RenderText
+        void RenderText
         (
              Shader &shader,
              std::string text,
