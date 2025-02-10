@@ -116,7 +116,9 @@ void TextRenderer::RenderText(Shader &shader, std::string text, float x, float y
         };
 
         glBindTexture(GL_TEXTURE_2D, glyph.TextureID);
-        vao.bind();
+        //vao.bind();
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        printf("next is glBufferSubData\n");
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
