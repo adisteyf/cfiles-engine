@@ -14,6 +14,10 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+/* ## stb ## */
+#include <stb/stb_image.h>
+#include <stb/stb_image_write.h>
+
 /* ## FE-headers ## */
 #include "shader.h"
 #include "VAO.h"
@@ -23,7 +27,8 @@
 /* ## standart lib ## */
 #include <string>
 #include <map>
-
+#include <iostream>
+#include <cstdio>
 
 struct Glyph {
     unsigned int TextureID;

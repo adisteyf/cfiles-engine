@@ -65,6 +65,8 @@ void fe_main()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     felog("next is glDebugMessageCallback");
     glDebugMessageCallback(debugCallback, 0);
 

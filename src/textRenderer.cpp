@@ -1,6 +1,5 @@
 #include "textRenderer.h"
 
-
 void TextRenderer::init(Shader &shader, std::string font_path)
 {
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(WINDOW_WIDTH), 0.0f, static_cast<float>(WINDOW_HEIGHT));
@@ -24,7 +23,7 @@ void TextRenderer::init(Shader &shader, std::string font_path)
         fe_panic();
     }
 
-    FT_Set_Pixel_Sizes(face, 0, 48);
+    FT_Set_Pixel_Sizes(face, 0, 100);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     for (unsigned int i=0; i<128; i++) {
@@ -32,6 +31,9 @@ void TextRenderer::init(Shader &shader, std::string font_path)
             felogerr("(FreeType 2): Failed to load glyph.");
             continue;
         }
+
+
+        //stbi_write_jpg("fe_glyph.jpg", face->glyph->bitmap.width, face->glyph->bitmap.rows, 3, face->glyph->bitmap.buffer, 100);
 
         unsigned int texture;
         glGenTextures(1, &texture);
@@ -53,6 +55,9 @@ void TextRenderer::init(Shader &shader, std::string font_path)
         glTexParameteri(GL_TEXTURE_2D,   GL_TEXTURE_WRAP_T,       GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D,   GL_TEXTURE_MIN_FILTER,   GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D,   GL_TEXTURE_MAG_FILTER,   GL_LINEAR);
+
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
         Glyph glyph =
         {
@@ -118,7 +123,6 @@ void TextRenderer::RenderText(Shader &shader, std::string text, float x, float y
         glBindTexture(GL_TEXTURE_2D, glyph.TextureID);
         //vao.bind();
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        printf("next is glBufferSubData\n");
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);

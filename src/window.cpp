@@ -8,7 +8,6 @@ Window::Window(int w, int h, const char* t) : width(w), height(h), title(t) {
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
 
     window = glfwCreateWindow(width, height, title, nullptr, nullptr);
-    //std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
     if (!window) {
         std::cerr << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
