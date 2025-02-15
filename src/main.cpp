@@ -107,7 +107,7 @@ void fe_main()
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         }
 
-        txtRenderer.RenderText(txtShader, "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+        txtRenderer.RenderText(txtShader, "This is sample text", 25.0f, 25.0f, 1.f, glm::vec3(0.5, 0.8f, 0.2f));
         felog("fe_main(): swapping buffers...");
         window.swapBuffers();
 

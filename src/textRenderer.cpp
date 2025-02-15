@@ -32,9 +32,6 @@ void TextRenderer::init(Shader &shader, std::string font_path)
             continue;
         }
 
-
-        //stbi_write_jpg("fe_glyph.jpg", face->glyph->bitmap.width, face->glyph->bitmap.rows, 3, face->glyph->bitmap.buffer, 100);
-
         unsigned int texture;
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
@@ -47,7 +44,7 @@ void TextRenderer::init(Shader &shader, std::string font_path)
             face->glyph->bitmap.rows,
             0,
             GL_RED,
-            GL_UNSIGNED_INT,
+            GL_UNSIGNED_BYTE,
             face->glyph->bitmap.buffer
         );
 
@@ -58,6 +55,12 @@ void TextRenderer::init(Shader &shader, std::string font_path)
 
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+        unsigned char* imageData = new unsigned char[face->glyph->bitmap.width * face->glyph->bitmap.rows];
+        memcpy(imageData, face->glyph->bitmap.buffer, face->glyph->bitmap.width * face->glyph->bitmap.rows);
+
+        stbi_write_png("fe-glyphs.png", face->glyph->bitmap.width, face->glyph->bitmap.rows, 1, imageData, face->glyph->bitmap.width);
+        delete[] imageData;
 
         Glyph glyph =
         {
