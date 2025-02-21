@@ -23,7 +23,7 @@ void TextRenderer::init(Shader &shader, std::string font_path)
         fe_panic();
     }
 
-    FT_Set_Pixel_Sizes(face, 0, 100);
+    FT_Set_Pixel_Sizes(face, 0, 20);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     for (unsigned int i=0; i<128; i++) {

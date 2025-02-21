@@ -21,6 +21,11 @@
 #include "imgui_impl_opengl3.h"
 
 
+void windowResizeCallback(GLFWwindow * window, int width, int height) {
+    glViewport(0,0,  width, height);
+}
+
+
 
 void setupImGui(GLFWwindow * window)
 {
@@ -70,6 +75,8 @@ void fe_main()
     felog("next is glDebugMessageCallback");
     glDebugMessageCallback(debugCallback, 0);
 
+    glfwSetWindowSizeCallback(window.getWindow(), windowResizeCallback);
+
     felog("fe_main(): initializing camera...");
     Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f));
 
@@ -82,6 +89,8 @@ void fe_main()
     TextRenderer txtRenderer;
     Shader txtShader("shaders/shader_txt.glsl");
     txtRenderer.init(txtShader, "assets/fonts/ProggyCleanRu.ttf");
+    // TODO: сделать адекватный конструктор для txtRenderer
+
 
     felog("fe_main(): entering main loop...");
     while (!window.shouldClose() && !fe_status) {
@@ -92,7 +101,7 @@ void fe_main()
 
         felog("fe_main(): updating camera...");
         input.checkInput(window.getWindow(), camera);
-        camera.inputs(window.getWindow());
+        //camera.inputs(window.getWindow());
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
         model.draw(shader, camera);
@@ -107,7 +116,7 @@ void fe_main()
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         }
 
-        txtRenderer.RenderText(txtShader, "This is sample text", 25.0f, 25.0f, 1.f, glm::vec3(0.5, 0.8f, 0.2f));
+        txtRenderer.RenderText(txtShader, "Sample text", 25.0f, 25.0f, 1.f, glm::vec3(0.5, 0.8f, 0.2f));
         felog("fe_main(): swapping buffers...");
         window.swapBuffers();
 

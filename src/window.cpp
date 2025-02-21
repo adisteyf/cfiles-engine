@@ -25,11 +25,6 @@ Window::Window(int w, int h, const char* t) : width(w), height(h), title(t) {
     glViewport(0, 0, width, height);
 }
 
-/*Window::~Window() {
-    if (window) glfwDestroyWindow(window);
-    terminateGLFW();
-}*/
-
 void Window::killWindow() {
     if (window) glfwDestroyWindow(window);
     terminateGLFW();
