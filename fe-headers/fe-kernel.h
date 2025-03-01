@@ -1,6 +1,10 @@
 #ifndef FE_KERNEL_H
 #define FE_KERNEL_H
 
+#ifdef FE_ASPECT_RATIO
+unsigned char fe_aspect_ratio = 1;
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

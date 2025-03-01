@@ -45,19 +45,21 @@ void Input::checkInput(GLFWwindow * window, Camera &cam)
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !showImGui) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
-        int half_w = cam.w/2;
-        int half_h = cam.h/2;
+        glm::vec2 center = {
+            cam.w/2,
+            cam.h/2,
+        };
 
         if (firstClick) {
-            glfwSetCursorPos(window, half_w, half_h);
+            glfwSetCursorPos(window, center.x, center.y);
             firstClick = false;
         }
 
         double mouseX, mouseY;
         glfwGetCursorPos(window, &mouseX, &mouseY);
 
-        float deltaX = (float)(mouseX - half_w);
-        float deltaY = (float)(mouseY - half_h);
+        float deltaX = (float)(mouseX - center.x);
+        float deltaY = (float)(mouseY - center.y);
 
         float rotX = cam.sensitivity * deltaY / cam.h;
         float rotY = cam.sensitivity * deltaX / cam.w;
@@ -72,7 +74,7 @@ void Input::checkInput(GLFWwindow * window, Camera &cam)
         std::cout << cam.orientation.x << std::endl;
         std::cout << cam.orientation.y << std::endl;
         std::cout << cam.orientation.z << std::endl;
-        glfwSetCursorPos(window, half_w, half_h);
+        glfwSetCursorPos(window, center.x, center.y);
     }
 
     else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {

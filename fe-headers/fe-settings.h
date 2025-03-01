@@ -13,7 +13,7 @@
 #define FE_GLFW_MINOR 3
 
 #define FE_GLFW_NO_SETCURSOR /* if glfwSetCursorPos() didn't work */
-
+#define FE_ASPECT_RATIO
 
 
 #define RED "\033[31m"
