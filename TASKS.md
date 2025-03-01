@@ -1,8 +1,9 @@
 Tasks:
 
-- [X] Fix error with loading texture
-- [X] Add **CMakeLists.txt**
-- [ ] Create depth buffer
+- [X] Отделить весь *инпут* от камеры.
+- [ ] Добавить *ресайз* для окна **AspectRatio**.
+- [X] Добавить *рендеринг* текста.
+- [ ] Пофиксить работу **ImGui** и **спринта**.
 
 #
 

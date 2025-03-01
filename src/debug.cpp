@@ -57,7 +57,9 @@ const char* getSeverityString(GLenum severity)
     }
 }
 
-
+void gl1282debugBlock() {
+    printf("DEBUG: gl1282debugBlock was called\n");
+}
 
 void GLAPIENTRY debugCallback
 (
@@ -87,6 +89,10 @@ void GLAPIENTRY debugCallback
     printf("\tseverity: %s\n", getSeverityString(severity));
     printf("\tlen: %d\n", length);
     printf("\tmsg: %s\n", message);
+
+    if (1282 == id) {
+        gl1282debugBlock();
+    }
 
     putchar('\n');
     if (countCall==2) {

@@ -11,6 +11,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "shader.h"
+#include "fe-kernel.h" /* for fe_panic() */
+#include <fstream>
+#include <iostream>
 
 using json = nlohmann::json;
 

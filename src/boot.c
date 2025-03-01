@@ -20,7 +20,9 @@ void fe_panic()
 
 int main()
 {
+    printf("BOOT: Booting Files Engine...\n");
     signal(SIGINT, fe_signal_handler);
+    printf("BOOT: Starting fe_main()...\n");
     //int status = fe_main();
     //printf("BOOT: fe_main() killed with status (%d)\n", status);
     fe_main();

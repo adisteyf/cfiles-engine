@@ -24,7 +24,7 @@ public:
     
     int getWidth() const { return width; }
     int getHeight() const { return height; }
-    
+
     void clear();
     static void initGLFW();
     static void terminateGLFW();

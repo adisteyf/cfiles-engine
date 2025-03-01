@@ -2,18 +2,45 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <glad/glad.h>
+
 #include <vector>
 #include "fe-kernel.h"
 #include "fe-settings.h"
-#include "camera.h"
 #include "mesh.h"
 #include "texture.h"
 #include "window.h"
+#include "camera.h"
 #include "model.h"
 #include "debug.h"
+#include "input.h"
+#include "textRenderer.h"
+
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 
-void fe_main() {
+void windowResizeCallback(GLFWwindow * window, int width, int height) {
+    glViewport(0,0,  width, height);
+}
+
+
+
+void setupImGui(GLFWwindow * window)
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO(); (void)io;
+
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 130");
+}
+
+void fe_main()
+{
     felog("fe_main(): initializing GLFW...");
     Window::initGLFW();
     felog("fe_main(): initializing window...");
@@ -43,13 +70,26 @@ void fe_main() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     felog("next is glDebugMessageCallback");
     glDebugMessageCallback(debugCallback, 0);
 
+    glfwSetWindowSizeCallback(window.getWindow(), windowResizeCallback);
+
     felog("fe_main(): initializing camera...");
-    Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(/*0.0f, 0.0f, 2.0f*/-2.f, 8.f, 4.f));
+    Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f));
+
+    felog("fe_main(): initializing imgui...");
+    setupImGui(window.getWindow());
+
 
     Model model("assets/models/sword/scene.gltf");
+    Input input;
+    TextRenderer txtRenderer;
+    Shader txtShader("shaders/shader_txt.glsl");
+    txtRenderer.init(txtShader, "assets/fonts/ProggyCleanRu.ttf");
+    // TODO: сделать адекватный конструктор для txtRenderer
 
 
     felog("fe_main(): entering main loop...");
@@ -60,11 +100,23 @@ void fe_main() {
         window.clear();
 
         felog("fe_main(): updating camera...");
-        camera.inputs(window.getWindow());
+        input.checkInput(window.getWindow(), camera);
+        //camera.inputs(window.getWindow());
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
         model.draw(shader, camera);
+        if (camera.showImGui) {
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
 
+            ImGui::ShowDemoWindow();
+            ImGui::Render();
+
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        }
+
+        txtRenderer.RenderText(txtShader, "Sample text", 25.0f, 25.0f, 1.f, glm::vec3(0.5, 0.8f, 0.2f));
         felog("fe_main(): swapping buffers...");
         window.swapBuffers();
 
