@@ -34,19 +34,21 @@ void Camera::inputs(GLFWwindow *window) {
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !showImGui) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
-        int half_w = w/2;
-        int half_h = h/2;
+        glm::vec2 center = {
+            w/2,
+            h/2
+        };
 
         if (firstClick) {
-            glfwSetCursorPos(window, half_w, half_h);
+            glfwSetCursorPos(window, center.x, center.y);
             firstClick = false;
         }
 
         double mouseX, mouseY;
         glfwGetCursorPos(window, &mouseX, &mouseY);
 
-        float deltaX = (float)(mouseX - half_w);
-        float deltaY = (float)(mouseY - half_h);
+        float deltaX = (float)(mouseX - center.x);
+        float deltaY = (float)(mouseY - center.y);
 
         float rotX = sensitivity * deltaY / h;
         float rotY = sensitivity * deltaX / w;
@@ -61,7 +63,7 @@ void Camera::inputs(GLFWwindow *window) {
         std::cout << orientation.x << std::endl;
         std::cout << orientation.y << std::endl;
         std::cout << orientation.z << std::endl;
-        glfwSetCursorPos(window, half_w, half_h);
+        glfwSetCursorPos(window, center.x, center.y);
     }
 
     else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
