@@ -1,6 +1,5 @@
 #include "camera.h"
 
-bool firstClick = true;
 Camera::~Camera() {}
 // TODO: add lastMouseX/Y and use it instead glfwSetCursorPos()
 int showImGuiState = GLFW_RELEASE;

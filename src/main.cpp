@@ -1,8 +1,8 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#include <glad/glad.h>
 
 #include <vector>
 #include "fe-kernel.h"
@@ -20,9 +20,22 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
+float aspect_ratio = 0;
 
-void windowResizeCallback(GLFWwindow * window, int width, int height) {
-    glViewport(0,0,  width, height);
+void windowResizeCallback(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
+
+    float currentAspectRatio = (float)width / (float)height;
+
+    if (currentAspectRatio > aspect_ratio) {
+        int viewportWidth = (int)(height * aspect_ratio);
+        int viewportX = (width - viewportWidth) / 2;
+        glViewport(viewportX, 0, viewportWidth, height);
+    } else {
+        int viewportHeight = (int)(width / aspect_ratio);
+        int viewportY = (height - viewportHeight) / 2;
+        glViewport(0, viewportY, width, viewportHeight);
+    }
 }
 
 
@@ -75,7 +88,13 @@ void fe_main()
     felog("next is glDebugMessageCallback");
     glDebugMessageCallback(debugCallback, 0);
 
+    felog("next is glfwSetWindowSizeCallback");
     glfwSetWindowSizeCallback(window.getWindow(), windowResizeCallback);
+
+    felog("calculating aspect_ratio...");
+    GLFWmonitor * primaryMonitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode * mmode = glfwGetVideoMode(primaryMonitor);
+    aspect_ratio = mmode->width / mmode->height;
 
     felog("fe_main(): initializing camera...");
     Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f));
