@@ -33,7 +33,7 @@ void Input::checkInput(GLFWwindow * window, Camera &cam)
 
     int showImGuiCurr = glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT);
     if (showImGuiCurr == GLFW_PRESS && showImGuiState == GLFW_RELEASE) {
-        showImGui = !showImGui;
+        cam.showImGui = !cam.showImGui;
     }
 
     showImGuiState = showImGuiCurr;
@@ -42,7 +42,7 @@ void Input::checkInput(GLFWwindow * window, Camera &cam)
     std::cout << cam.pos.y << std::endl;
     std::cout << cam.pos.z << std::endl;
 
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !showImGui) {
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !cam.showImGui) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
         glm::vec2 center = {
