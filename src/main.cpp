@@ -34,6 +34,11 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
         int viewportY = (height - viewportHeight) / 2;
         glViewport(0, viewportY, width, viewportHeight);
     }
+
+    Camera* camera = static_cast<Camera*>(glfwGetWindowUserPointer(window));
+    if (camera) {
+        camera->updateMatrix(45.0f, 0.1f, 100.0f);
+    }
 }
 
 
@@ -97,6 +102,7 @@ void fe_main()
 
     felog("fe_main(): initializing camera...");
     Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f));
+    glfwSetWindowUserPointer(window.getWindow(), &camera);
 
     felog("fe_main(): initializing imgui...");
     setupImGui(window.getWindow());
@@ -106,7 +112,7 @@ void fe_main()
     Input input;
     TextRenderer txtRenderer;
     Shader txtShader("shaders/shader_txt.glsl");
-    txtRenderer.init(txtShader, "assets/fonts/ProggyCleanRu.ttf");
+    txtRenderer.init(txtShader, "assets/fonts/ProggyCleanRu.ttf", 40);
     // TODO: сделать адекватный конструктор для txtRenderer
 
 
@@ -134,7 +140,7 @@ void fe_main()
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         }
 
-        txtRenderer.RenderText(txtShader, "Sample text", 25.0f, 25.0f, 1.f, glm::vec3(0.5, 0.8f, 0.2f));
+        txtRenderer.RenderText(txtShader, "Sample text", 25.0f, 25.0f, .5f, glm::vec3(0.5, 0.8f, 0.2f));
         felog("fe_main(): swapping buffers...");
         window.swapBuffers();
 
