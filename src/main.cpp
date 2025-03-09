@@ -23,8 +23,6 @@
 float aspect_ratio = 0;
 
 void windowResizeCallback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height);
-
     float currentAspectRatio = (float)width / (float)height;
 
     if (currentAspectRatio > aspect_ratio) {
@@ -94,7 +92,8 @@ void fe_main()
     felog("calculating aspect_ratio...");
     GLFWmonitor * primaryMonitor = glfwGetPrimaryMonitor();
     const GLFWvidmode * mmode = glfwGetVideoMode(primaryMonitor);
-    aspect_ratio = mmode->width / mmode->height;
+    aspect_ratio = (float)mmode->width / (float)mmode->height;
+    printf("VIDM:\n%d\n%d\n%f\n", mmode->width, mmode->height, aspect_ratio);
 
     felog("fe_main(): initializing camera...");
     Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f));
