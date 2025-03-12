@@ -23,6 +23,7 @@
 
 float aspect_ratio = 0;
 
+#ifdef FE_ASPECT_RATIO
 void windowResizeCallback(GLFWwindow* window, int width, int height) {
     float currentAspectRatio = (float)width / (float)height;
 
@@ -41,6 +42,7 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
         camera->updateMatrix(45.0f, 0.1f, 100.0f);
     }
 }
+#endif
 
 
 
@@ -95,8 +97,10 @@ void fe_main()
     felog("next is glDebugMessageCallback");
     glDebugMessageCallback(debugCallback, 0);
 
+#ifdef FE_ASPECT_RATIO
     felog("next is glfwSetWindowSizeCallback");
     glfwSetWindowSizeCallback(window.getWindow(), windowResizeCallback);
+#endif
 
     felog("calculating aspect_ratio...");
     GLFWmonitor * primaryMonitor = glfwGetPrimaryMonitor();
