@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include <GL/gl.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -64,6 +65,7 @@ void fe_main()
 
     felog("fe_main(): initializing shader...");
     Shader shader("shaders/shader_def.glsl");
+    Shader outlineShader("shaders/outline_shader.glsl");
     felog("fe_main(): initializing model...");
 
     felog("fe_main(): initializing light shader...");
@@ -86,6 +88,8 @@ void fe_main()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     felog("next is glDebugMessageCallback");
@@ -125,10 +129,23 @@ void fe_main()
 
         felog("fe_main(): updating camera...");
         input.checkInput(window.getWindow(), camera);
-        //camera.inputs(window.getWindow());
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
+        glStencilFunc(GL_ALWAYS, 1, 0xff);
+        glStencilMask(0xff);
         model.draw(shader, camera);
+
+        glStencilFunc(GL_NOTEQUAL, 1, 0xff);
+        glStencilMask(0x00);
+        glDisable(GL_DEPTH_TEST);
+        outlineShader.bind();
+        glUniform1f(glGetUniformLocation(outlineShader.getProgram(), "outlining"), 1.2f);
+        model.draw(outlineShader, camera);
+
+        glStencilMask(0xff);
+        glStencilFunc(GL_ALWAYS, 0, 0xff);
+        glEnable(GL_DEPTH_TEST);
+
         if (camera.showImGui) {
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
