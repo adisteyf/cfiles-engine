@@ -112,7 +112,7 @@ void fe_main()
     setupImGui(window.getWindow());
 
 
-    Model model("assets/models/sword/scene.gltf");
+    Model model("assets/models/bunny/scene.gltf");
     Input input;
     TextRenderer txtRenderer;
     Shader txtShader("shaders/shader_txt.glsl");
@@ -127,8 +127,9 @@ void fe_main()
         felog("fe_main(): clearing window...");
         window.clear();
 
-        felog("fe_main(): updating camera...");
+        felog("fe_main(): checking input...");
         input.checkInput(window.getWindow(), camera);
+        felog("fe_main(): updating camera...");
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
         glStencilFunc(GL_ALWAYS, 1, 0xff);
@@ -152,6 +153,12 @@ void fe_main()
             ImGui::NewFrame();
 
             ImGui::ShowDemoWindow();
+
+            ImGui::Begin("Test properties");
+                ImGui::SliderFloat("Speed", &camera.speed, 0.001, 0.5);
+            ImGui::End();
+
+
             ImGui::Render();
 
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

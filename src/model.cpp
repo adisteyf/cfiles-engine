@@ -1,5 +1,9 @@
 #include "model.h"
 
+void model_textissetted() {
+    printf("test is setted\n");
+}
+
 Model::Model(const char * file)
 {
     std::string text = get_file_contents(file);
@@ -21,6 +25,7 @@ void Model::draw(Shader &shader, Camera &camera)
 
 std::string Model::get_file_contents(const char* filename)
 {
+    std::cout << "reading file: \"" << filename << "\"" << std::endl;
     std::ifstream in(filename, std::ios::binary);
     if (in)
     {
