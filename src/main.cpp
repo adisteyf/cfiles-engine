@@ -118,11 +118,8 @@ void fe_main()
 
     Model model("assets/models/bunny/scene.gltf");
     Input input;
-    TextRenderer txtRenderer;
     Shader txtShader("shaders/shader_txt.glsl");
-    txtRenderer.init(txtShader, "assets/fonts/ProggyCleanRu.ttf", 40);
-    // TODO: сделать адекватный конструктор для txtRenderer
-
+    TextRenderer txtRenderer(txtShader, "assets/fonts/ProggyCleanRu.ttf", 40);
 
     felog("fe_main(): entering main loop...");
     while (!window.shouldClose() && !fe_status) {

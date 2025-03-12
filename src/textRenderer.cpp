@@ -1,6 +1,6 @@
 #include "textRenderer.h"
 
-void TextRenderer::init(Shader &shader, std::string font_path, int font_size)
+TextRenderer::TextRenderer(Shader &shader, std::string font_path, int font_size)
 {
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(WINDOW_WIDTH), 0.0f, static_cast<float>(WINDOW_HEIGHT));
     shader.bind();
