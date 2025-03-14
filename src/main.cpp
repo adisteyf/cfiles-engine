@@ -39,6 +39,8 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 
     Camera* camera = static_cast<Camera*>(glfwGetWindowUserPointer(window));
     if (camera) {
+        camera->w = width;
+        camera->h = height;
         camera->updateMatrix(45.0f, 0.1f, 100.0f);
     }
 }
@@ -131,10 +133,6 @@ void fe_main()
         felog("fe_main(): checking input...");
         input.checkInput(window.getWindow(), camera);
         felog("fe_main(): updating camera...");
-#ifdef FE_ASPECT_RATIO
-        camera.w = mmode->width;
-        camera.h = mmode->height;
-#endif
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
         glStencilFunc(GL_ALWAYS, 1, 0xff);
