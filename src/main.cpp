@@ -100,13 +100,13 @@ void fe_main()
 #ifdef FE_ASPECT_RATIO
     felog("next is glfwSetWindowSizeCallback");
     glfwSetWindowSizeCallback(window.getWindow(), windowResizeCallback);
-#endif
 
     felog("calculating aspect_ratio...");
     GLFWmonitor * primaryMonitor = glfwGetPrimaryMonitor();
     const GLFWvidmode * mmode = glfwGetVideoMode(primaryMonitor);
     aspect_ratio = (float)mmode->width / (float)mmode->height;
     printf("VIDM:\n%d\n%d\n%f\n", mmode->width, mmode->height, aspect_ratio);
+#endif
 
     felog("fe_main(): initializing camera...");
     Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f));
@@ -116,7 +116,7 @@ void fe_main()
     setupImGui(window.getWindow());
 
 
-    Model model("assets/models/bunny/scene.gltf");
+    Model model("assets/models/sword/scene.gltf");
     Input input;
     Shader txtShader("shaders/shader_txt.glsl");
     TextRenderer txtRenderer(txtShader, "assets/fonts/ProggyCleanRu.ttf", 40);
@@ -131,6 +131,10 @@ void fe_main()
         felog("fe_main(): checking input...");
         input.checkInput(window.getWindow(), camera);
         felog("fe_main(): updating camera...");
+#ifdef FE_ASPECT_RATIO
+        camera.w = mmode->width;
+        camera.h = mmode->height;
+#endif
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
         glStencilFunc(GL_ALWAYS, 1, 0xff);
