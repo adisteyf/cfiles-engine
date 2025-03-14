@@ -155,7 +155,7 @@ void fe_main()
 
             ImGui::ShowDemoWindow();
 
-            ImGui::Begin("Test properties");
+            ImGui::Begin("Settings");
                 ImGui::SliderFloat("Speed", &camera.speed, 0.001, 0.5);
             ImGui::End();
 
