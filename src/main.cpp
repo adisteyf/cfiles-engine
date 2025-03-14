@@ -1,3 +1,4 @@
+/* Headers for Graphics API */
 #include <glad/glad.h>
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
@@ -5,11 +6,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <vector>
+/* fe-headers */
 #include "fe-kernel.h"
 #include "fe-settings.h"
-#include "mesh.h"
-#include "texture.h"
 #include "window.h"
 #include "camera.h"
 #include "model.h"
@@ -17,6 +16,7 @@
 #include "input.h"
 #include "textRenderer.h"
 
+/* ImGui */
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -83,10 +83,8 @@ void fe_main()
 
     felog("fe_main(): binding shader...");
     shader.bind();
-    felog("fe_main(): setting pyramid model...");
-
-    glUniform4f(glGetUniformLocation(shader.getProgram(), "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-    glUniform3f(glGetUniformLocation(shader.getProgram(), "lightPos"), lightPos.x, lightPos.y, lightPos.z);
+    shader.setUniform("lightColor", lightColor);
+    shader.setUniform("lightPos", lightPos);
 
     felog("fe_main(): enabling depth test...");
     glEnable(GL_DEPTH_TEST);
@@ -143,7 +141,7 @@ void fe_main()
         glStencilMask(0x00);
         glDisable(GL_DEPTH_TEST);
         outlineShader.bind();
-        glUniform1f(glGetUniformLocation(outlineShader.getProgram(), "outlining"), 1.2f);
+        outlineShader.setUniform("outlining", 1.2f);
         model.draw(outlineShader, camera);
 
         glStencilMask(0xff);
