@@ -1,11 +1,8 @@
 #include "camera.h"
 
-bool firstClick = true;
-Camera::~Camera() {}
 // TODO: add lastMouseX/Y and use it instead glfwSetCursorPos()
-int showImGuiState = GLFW_RELEASE;
-
-void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane) {
+void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane)
+{
     glm::mat4 view = glm::mat4(1.0f);
     glm::mat4 projection = glm::mat4(1.0f);
 
@@ -15,59 +12,6 @@ void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane) {
 }
 
 void Camera::matrix(Shader &shader, const char *uniform) {
-    glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
+    shader.setUniform(uniform, cameraMatrix);
 }
 
-
-void Camera::inputs(GLFWwindow *window) {
-    int showImGuiCurr = glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT);
-    if (showImGuiCurr == GLFW_PRESS && showImGuiState == GLFW_RELEASE) {
-        showImGui = !showImGui;
-    }
-
-    showImGuiState = showImGuiCurr;
-
-    std::cout << pos.x << std::endl;
-    std::cout << pos.y << std::endl;
-    std::cout << pos.z << std::endl;
-
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !showImGui) {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-
-        glm::vec2 center = {
-            w/2,
-            h/2
-        };
-
-        if (firstClick) {
-            glfwSetCursorPos(window, center.x, center.y);
-            firstClick = false;
-        }
-
-        double mouseX, mouseY;
-        glfwGetCursorPos(window, &mouseX, &mouseY);
-
-        float deltaX = (float)(mouseX - center.x);
-        float deltaY = (float)(mouseY - center.y);
-
-        float rotX = sensitivity * deltaY / h;
-        float rotY = sensitivity * deltaX / w;
-        glm::vec3 newOrientation = glm::rotate(orientation, glm::radians(-rotX), glm::normalize(glm::cross(orientation, up)));
-
-        if (abs((int)glm::angle(newOrientation, up) - (int)glm::radians(90.0f)) <= glm::radians(85.0f)) {
-            orientation = newOrientation;
-        }
-
-        orientation = glm::rotate(orientation, glm::radians(-rotY), up);
-
-        std::cout << orientation.x << std::endl;
-        std::cout << orientation.y << std::endl;
-        std::cout << orientation.z << std::endl;
-        glfwSetCursorPos(window, center.x, center.y);
-    }
-
-    else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        firstClick = true;
-    }
-}

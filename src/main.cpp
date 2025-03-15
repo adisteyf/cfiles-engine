@@ -1,14 +1,14 @@
+/* Headers for Graphics API */
+#include <glad/glad.h>
+#include <GL/gl.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <glad/glad.h>
-
-#include <vector>
+/* fe-headers */
 #include "fe-kernel.h"
 #include "fe-settings.h"
-#include "mesh.h"
-#include "texture.h"
 #include "window.h"
 #include "camera.h"
 #include "model.h"
@@ -16,14 +16,53 @@
 #include "input.h"
 #include "textRenderer.h"
 
+/* ImGui */
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
 
-void windowResizeCallback(GLFWwindow * window, int width, int height) {
-    glViewport(0,0,  width, height);
+
+void fe_GLContext(void)
+{
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, FE_GLFW_MAJOR);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, FE_GLFW_MINOR);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
+    glfwWindowHint(GLFW_STENCIL_BITS, 8);
 }
+
+void fe_preWorkFuncs(void)
+{
+    Window::initGLFW();
+    fe_GLContext();
+}
+
+
+#ifdef FE_ASPECT_RATIO
+float aspect_ratio = 0;
+
+void windowResizeCallback(GLFWwindow* window, int width, int height) {
+    float currentAspectRatio = (float)width / (float)height;
+
+    if (currentAspectRatio > aspect_ratio) {
+        int viewportWidth = (int)(height * aspect_ratio);
+        int viewportX = (width - viewportWidth) / 2;
+        glViewport(viewportX, 0, viewportWidth, height);
+    } else {
+        int viewportHeight = (int)(width / aspect_ratio);
+        int viewportY = (height - viewportHeight) / 2;
+        glViewport(0, viewportY, width, viewportHeight);
+    }
+
+    Camera* camera = static_cast<Camera*>(glfwGetWindowUserPointer(window));
+    if (camera) {
+        camera->w = width;
+        camera->h = height;
+        camera->updateMatrix(45.0f, 0.1f, 100.0f);
+    }
+}
+#endif
 
 
 
@@ -41,13 +80,14 @@ void setupImGui(GLFWwindow * window)
 
 void fe_main()
 {
-    felog("fe_main(): initializing GLFW...");
-    Window::initGLFW();
+    felog("fe_main(): enabling pre-work functions...");
+    fe_preWorkFuncs();
     felog("fe_main(): initializing window...");
     Window window(WINDOW_WIDTH, WINDOW_HEIGHT, "Files Engine");
 
     felog("fe_main(): initializing shader...");
     Shader shader("shaders/shader_def.glsl");
+    Shader outlineShader("shaders/outline_shader.glsl");
     felog("fe_main(): initializing model...");
 
     felog("fe_main(): initializing light shader...");
@@ -61,24 +101,34 @@ void fe_main()
 
     felog("fe_main(): binding shader...");
     shader.bind();
-    felog("fe_main(): setting pyramid model...");
-
-    glUniform4f(glGetUniformLocation(shader.getProgram(), "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-    glUniform3f(glGetUniformLocation(shader.getProgram(), "lightPos"), lightPos.x, lightPos.y, lightPos.z);
+    shader.setUniform("lightColor", lightColor);
+    shader.setUniform("lightPos", lightPos);
 
     felog("fe_main(): enabling depth test...");
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     felog("next is glDebugMessageCallback");
     glDebugMessageCallback(debugCallback, 0);
 
+#ifdef FE_ASPECT_RATIO
+    felog("next is glfwSetWindowSizeCallback");
     glfwSetWindowSizeCallback(window.getWindow(), windowResizeCallback);
+
+    felog("calculating aspect_ratio...");
+    GLFWmonitor * primaryMonitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode * mmode = glfwGetVideoMode(primaryMonitor);
+    aspect_ratio = (float)mmode->width / (float)mmode->height;
+    printf("VIDM:\n%d\n%d\n%f\n", mmode->width, mmode->height, aspect_ratio);
+#endif
 
     felog("fe_main(): initializing camera...");
     Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f));
+    glfwSetWindowUserPointer(window.getWindow(), &camera);
 
     felog("fe_main(): initializing imgui...");
     setupImGui(window.getWindow());
@@ -86,11 +136,8 @@ void fe_main()
 
     Model model("assets/models/sword/scene.gltf");
     Input input;
-    TextRenderer txtRenderer;
     Shader txtShader("shaders/shader_txt.glsl");
-    txtRenderer.init(txtShader, "assets/fonts/ProggyCleanRu.ttf");
-    // TODO: сделать адекватный конструктор для txtRenderer
-
+    TextRenderer txtRenderer(txtShader, "assets/fonts/ProggyCleanRu.ttf", 40);
 
     felog("fe_main(): entering main loop...");
     while (!window.shouldClose() && !fe_status) {
@@ -99,24 +146,44 @@ void fe_main()
         felog("fe_main(): clearing window...");
         window.clear();
 
-        felog("fe_main(): updating camera...");
+        felog("fe_main(): checking input...");
         input.checkInput(window.getWindow(), camera);
-        //camera.inputs(window.getWindow());
+        felog("fe_main(): updating camera...");
         camera.updateMatrix(45.0f, 0.1f, 100.0f);
 
+        glStencilFunc(GL_ALWAYS, 1, 0xff);
+        glStencilMask(0xff);
         model.draw(shader, camera);
+
+        glStencilFunc(GL_NOTEQUAL, 1, 0xff);
+        glStencilMask(0x00);
+        glDisable(GL_DEPTH_TEST);
+        outlineShader.bind();
+        outlineShader.setUniform("outlining", 1.2f);
+        model.draw(outlineShader, camera);
+
+        glStencilMask(0xff);
+        glStencilFunc(GL_ALWAYS, 0, 0xff);
+        glEnable(GL_DEPTH_TEST);
+
         if (camera.showImGui) {
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
             ImGui::NewFrame();
 
             ImGui::ShowDemoWindow();
+
+            ImGui::Begin("Settings");
+                ImGui::SliderFloat("Speed", &camera.speed, 0.001, 0.5);
+            ImGui::End();
+
+
             ImGui::Render();
 
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         }
 
-        txtRenderer.RenderText(txtShader, "Sample text", 25.0f, 25.0f, 1.f, glm::vec3(0.5, 0.8f, 0.2f));
+        txtRenderer.RenderText(txtShader, "Sample text", 25.0f, 25.0f, .5f, glm::vec3(0.5, 0.8f, 0.2f));
         felog("fe_main(): swapping buffers...");
         window.swapBuffers();
 

@@ -45,7 +45,7 @@ class TextRenderer
         VAO vao;
         unsigned int vbo;
 
-        void init(Shader &shader, std::string font_path);
+        TextRenderer(Shader &shader, std::string font_path, int font_size);
         void RenderText
         (
              Shader &shader,

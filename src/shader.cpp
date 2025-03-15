@@ -99,10 +99,17 @@ void Shader::bind() {
     glUseProgram(program);
 }
 
+/* uniforms */
 void Shader::setUniform(const char *name, int val)
 {
     int location = glGetUniformLocation(program, name);
     if (location != -1) glUniform1i(location, val);
+}
+
+void Shader::setUniform(const char *name, float val)
+{
+    int location = glGetUniformLocation(program, name);
+    if (location != -1) glUniform1f(location, val);
 }
 
 void Shader::setUniform(const char *name, glm::mat4 val)
@@ -111,6 +118,20 @@ void Shader::setUniform(const char *name, glm::mat4 val)
     if (location != -1) glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(val));
 }
 
+void Shader::setUniform(const char *name, glm::vec4 val)
+{
+    int location = glGetUniformLocation(program, name);
+    if (location != -1) glUniform4f(location, val.x, val.y, val.z, val.w);
+}
+
+void Shader::setUniform(const char *name, glm::vec3 val)
+{
+    int location = glGetUniformLocation(program, name);
+    if (location != -1) glUniform3f(location, val.x, val.y, val.z);
+}
+
+
+/* destroy shader functions */
 void Shader::killShader()
 {
     glDeleteProgram(program);
@@ -122,6 +143,7 @@ void Shader::freeShader()
     glDeleteShader(vs);
     glDeleteShader(fs);
 }
+
 
 GLuint Shader::getProgram()
 {

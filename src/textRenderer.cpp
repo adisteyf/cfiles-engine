@@ -1,11 +1,11 @@
 #include "textRenderer.h"
 
-void TextRenderer::init(Shader &shader, std::string font_path)
+TextRenderer::TextRenderer(Shader &shader, std::string font_path, int font_size)
 {
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(WINDOW_WIDTH), 0.0f, static_cast<float>(WINDOW_HEIGHT));
     shader.bind();
-    glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    
+    shader.setUniform("projection", projection);
+
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) {
         felogerr("(FreeType 2): Couldn't init FreeType lib.");
@@ -23,7 +23,7 @@ void TextRenderer::init(Shader &shader, std::string font_path)
         fe_panic();
     }
 
-    FT_Set_Pixel_Sizes(face, 0, 20);
+    FT_Set_Pixel_Sizes(face, 0, font_size);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     for (unsigned int i=0; i<128; i++) {
@@ -55,12 +55,6 @@ void TextRenderer::init(Shader &shader, std::string font_path)
 
         glPixelStorei(GL_PACK_ALIGNMENT, 1);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-        unsigned char* imageData = new unsigned char[face->glyph->bitmap.width * face->glyph->bitmap.rows];
-        memcpy(imageData, face->glyph->bitmap.buffer, face->glyph->bitmap.width * face->glyph->bitmap.rows);
-
-        stbi_write_png("fe-glyphs.png", face->glyph->bitmap.width, face->glyph->bitmap.rows, 1, imageData, face->glyph->bitmap.width);
-        delete[] imageData;
 
         Glyph glyph =
         {
@@ -97,7 +91,7 @@ void TextRenderer::init(Shader &shader, std::string font_path)
 void TextRenderer::RenderText(Shader &shader, std::string text, float x, float y, float scale, glm::vec3 color)
 {
     shader.bind();
-    glUniform3f(glGetUniformLocation(shader.getProgram(), "textColor"), color.x, color.y, color.z);
+    shader.setUniform("textColor", color);
     glActiveTexture(GL_TEXTURE0);
     vao.bind();
 

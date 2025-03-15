@@ -9,8 +9,6 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/vector_angle.hpp>
-#include <iostream>
-
 #include "shader.h"
 
 class Camera {
@@ -23,15 +21,12 @@ public:
 
     float speed = 0.1f;
     float sensitivity = 50.0f;
-    float fov = 45.0f;
+    float fov = 90.0f;
     float near_plane = 0.1f;
     float far_plane = 100.0f;
     bool showImGui = false;
 
     Camera(int w, int h, glm::vec3 pos) : w(w), h(h), pos(pos) {}
-    ~Camera();
-
-    void inputs(GLFWwindow *window);
 
     void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
     void matrix(Shader &shader, const char *uniform);
