@@ -14,7 +14,15 @@
 
 #define FE_GLFW_NO_SETCURSOR /* if glfwSetCursorPos() didn't work */
 #define FE_ASPECT_RATIO
-
+#define FE_GLENABLE \
+    glEnable(GL_DEPTH_TEST); \
+    glEnable(GL_DEBUG_OUTPUT); \
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); \
+    glEnable(GL_STENCIL_TEST); \
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); \
+    glEnable(GL_BLEND); \
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#define FE_ENABLE_STENCIL
 
 #define RED "\033[31m"
 #define RESET "\033[0m"

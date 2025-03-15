@@ -22,7 +22,6 @@
 #include "imgui_impl_opengl3.h"
 
 
-
 void fe_GLContext(void)
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, FE_GLFW_MAJOR);
@@ -104,14 +103,8 @@ void fe_main()
     shader.setUniform("lightColor", lightColor);
     shader.setUniform("lightPos", lightPos);
 
-    felog("fe_main(): enabling depth test...");
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_DEBUG_OUTPUT);
-    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-    glEnable(GL_STENCIL_TEST);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    felog("fe_main(): enabling glEnables...");
+    FE_GLENABLE
     felog("next is glDebugMessageCallback");
     glDebugMessageCallback(debugCallback, 0);
 
