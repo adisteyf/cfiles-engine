@@ -1,4 +1,5 @@
 #include "mesh.h"
+#include <glm/gtc/type_ptr.hpp>
 
 Mesh::Mesh(std::vector <Vertex>& vertices, std::vector <GLuint>& indices, std::vector <Texture>& textures)
 {
@@ -52,7 +53,8 @@ void Mesh::draw
         textures[i].texUnit(shader, (type + num).c_str(), i);
         textures[i].bind();
     }
-    glUniform3f(glGetUniformLocation(shader.getProgram(), "camPos"), camera.pos.x, camera.pos.y, camera.pos.z);
+
+    shader.setUniform("camPos", camera.pos);
     camera.matrix(shader, "camMatrix");
 
     glm::mat4 trans = glm::mat4(1.0f);
@@ -63,10 +65,10 @@ void Mesh::draw
     rot = glm::mat4_cast(rotation);
     sca = glm::scale(sca, scale);
 
-    glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "translation"), 1, GL_FALSE, glm::value_ptr(trans));
-    glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "rotation"), 1, GL_FALSE, glm::value_ptr(rot));
-    glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "scale"), 1, GL_FALSE, glm::value_ptr(sca));
-    glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "model"), 1, GL_FALSE, glm::value_ptr(matrix));
+    shader.setUniform("translation", trans);
+    shader.setUniform("rotation", rot);
+    shader.setUniform("scale", sca);
+    shader.setUniform("model", matrix);
 
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 }

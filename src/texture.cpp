@@ -153,9 +153,8 @@ Texture::Texture(unsigned char *data, const char* texType, GLuint slot) {
 }
 
 void Texture::texUnit(Shader& shader, const char *uniform, GLuint unit) {
-    GLuint tex0Uni = glGetUniformLocation(shader.getProgram(), uniform);
     shader.bind();
-    glUniform1i(tex0Uni, unit);
+    shader.setUniform(uniform, (int)unit);
 }
 
 void Texture::bind() {

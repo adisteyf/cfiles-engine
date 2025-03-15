@@ -4,8 +4,8 @@ TextRenderer::TextRenderer(Shader &shader, std::string font_path, int font_size)
 {
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(WINDOW_WIDTH), 0.0f, static_cast<float>(WINDOW_HEIGHT));
     shader.bind();
-    glUniformMatrix4fv(glGetUniformLocation(shader.getProgram(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    
+    shader.setUniform("projection", projection);
+
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) {
         felogerr("(FreeType 2): Couldn't init FreeType lib.");
@@ -91,7 +91,7 @@ TextRenderer::TextRenderer(Shader &shader, std::string font_path, int font_size)
 void TextRenderer::RenderText(Shader &shader, std::string text, float x, float y, float scale, glm::vec3 color)
 {
     shader.bind();
-    glUniform3f(glGetUniformLocation(shader.getProgram(), "textColor"), color.x, color.y, color.z);
+    shader.setUniform("textColor", color);
     glActiveTexture(GL_TEXTURE0);
     vao.bind();
 
