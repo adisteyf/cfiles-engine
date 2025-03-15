@@ -16,10 +16,10 @@ private:
 public:
     Window(int w, int h, const char* t);
     //~Window();
-    
-    bool shouldClose();
-    void swapBuffers();
-    void pollEvents();
+
+    bool shouldClose() const { return glfwWindowShouldClose(window); }
+    void swapBuffers() { glfwSwapBuffers(window); }
+    void pollEvents() { glfwPollEvents(); }
     GLFWwindow* getWindow() { return window; }
     
     int getWidth() const { return width; }
@@ -27,7 +27,7 @@ public:
 
     void clear();
     static void initGLFW();
-    static void terminateGLFW();
+    static void terminateGLFW() { glfwTerminate(); }
     void killWindow();
 };
 

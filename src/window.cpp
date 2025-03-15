@@ -17,25 +17,12 @@ Window::Window(int w, int h, const char* t) : width(w), height(h), title(t)
         fe_panic();
     }
 
-
     glViewport(0, 0, width, height);
 }
 
 void Window::killWindow() {
     if (window) glfwDestroyWindow(window);
     terminateGLFW();
-}
-
-bool Window::shouldClose() {
-    return glfwWindowShouldClose(window);
-}
-
-void Window::swapBuffers() {
-    glfwSwapBuffers(window);
-}
-
-void Window::pollEvents() {
-    glfwPollEvents();
 }
 
 void Window::clear() {
@@ -50,6 +37,3 @@ void Window::initGLFW() {
     }
 }
 
-void Window::terminateGLFW() {
-    glfwTerminate();
-}
