@@ -159,7 +159,7 @@ void fe_main()
         glStencilMask(0x00);
         glDisable(GL_DEPTH_TEST);
         outlineShader.bind();
-        outlineShader.setUniform("outlining", 1.2f);
+        outlineShader.setUniform("outlining", 0.08f);
         model.draw(outlineShader, camera);
 
         glStencilMask(0xff);
