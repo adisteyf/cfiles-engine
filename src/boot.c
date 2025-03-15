@@ -5,12 +5,13 @@
 
 volatile int fe_status = 0;
 
-void fe_signal_handler(int signal)
-{
+void
+fe_signal_handler (int signal) {
     fe_status = signal;
 }
 
-void fe_panic()
+void
+fe_panic (void)
 {
     printf("BOOT: Killing Files Engine...\n");
     raise(SIGINT);
@@ -18,13 +19,13 @@ void fe_panic()
     exit(-1);
 }
 
-int main()
+
+int
+main (void)
 {
     printf("BOOT: Booting Files Engine...\n");
     signal(SIGINT, fe_signal_handler);
     printf("BOOT: Starting fe_main()...\n");
-    //int status = fe_main();
-    //printf("BOOT: fe_main() killed with status (%d)\n", status);
     fe_main();
 
     return 0;

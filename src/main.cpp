@@ -21,9 +21,27 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-float aspect_ratio = 0;
+
+
+void fe_GLContext(void)
+{
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, FE_GLFW_MAJOR);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, FE_GLFW_MINOR);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
+    glfwWindowHint(GLFW_STENCIL_BITS, 8);
+}
+
+void fe_preWorkFuncs(void)
+{
+    Window::initGLFW();
+    fe_GLContext();
+}
+
 
 #ifdef FE_ASPECT_RATIO
+float aspect_ratio = 0;
+
 void windowResizeCallback(GLFWwindow* window, int width, int height) {
     float currentAspectRatio = (float)width / (float)height;
 
@@ -62,8 +80,8 @@ void setupImGui(GLFWwindow * window)
 
 void fe_main()
 {
-    felog("fe_main(): initializing GLFW...");
-    Window::initGLFW();
+    felog("fe_main(): enabling pre-work functions...");
+    fe_preWorkFuncs();
     felog("fe_main(): initializing window...");
     Window window(WINDOW_WIDTH, WINDOW_HEIGHT, "Files Engine");
 
