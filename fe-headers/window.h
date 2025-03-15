@@ -15,7 +15,6 @@ private:
 
 public:
     Window(int w, int h, const char* t);
-    //~Window();
 
     bool shouldClose() const { return glfwWindowShouldClose(window); }
     void swapBuffers() { glfwSwapBuffers(window); }
