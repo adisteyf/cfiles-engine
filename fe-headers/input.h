@@ -1,3 +1,6 @@
+#ifndef FE_INPUT
+#define FE_INPUT
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -12,3 +15,5 @@ class Input {
         bool firstClick = true;
         void checkInput(GLFWwindow * window, Camera &cam);
 };
+
+#endif // FE_INPUT
