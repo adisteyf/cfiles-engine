@@ -15,11 +15,45 @@
 #include "debug.h"
 #include "input.h"
 #include "textRenderer.h"
+#include "scriptManager.h"
+#include "testApp.h"
 
 /* ImGui */
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+
+/* std */
+#include <optional>
+
+
+
+
+
+
+
+Shader * shader = nullptr;
+Shader * outlineShader = nullptr;
+Window * window = nullptr;
+Input  * input = nullptr;
+
+Shader* fe_getShader(int type)
+{
+    switch (type) {
+        case 0: return shader;
+        case 1: return outlineShader;
+        default: return 0;
+    }
+}
+
+Window* fe_getWindow(void) {
+    return window;
+}
+
+Input* fe_getInput(void) {
+    return input;
+}
+
 
 
 void fe_GLContext(void)
@@ -82,13 +116,13 @@ void fe_main()
     felog("fe_main(): enabling pre-work functions...");
     fe_preWorkFuncs();
     felog("fe_main(): initializing window...");
-    Window window(WINDOW_WIDTH, WINDOW_HEIGHT, "Files Engine");
-
+    window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, "Files Engine");
+    
     felog("fe_main(): initializing shader...");
-    Shader shader("shaders/shader_def.glsl");
-    Shader outlineShader("shaders/outline_shader.glsl");
-    felog("fe_main(): initializing model...");
+    shader = new Shader("shaders/shader_def.glsl");
+    outlineShader = new Shader("shaders/outline_shader.glsl");
 
+    felog("fe_main(): initializing model...");
     felog("fe_main(): initializing light shader...");
 
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -99,9 +133,9 @@ void fe_main()
     lightModel = glm::translate(lightModel, lightPos);
 
     felog("fe_main(): binding shader...");
-    shader.bind();
-    shader.setUniform("lightColor", lightColor);
-    shader.setUniform("lightPos", lightPos);
+    shader->bind();
+    shader->setUniform("lightColor", lightColor);
+    shader->setUniform("lightPos", lightPos);
 
     felog("fe_main(): enabling glEnables...");
     FE_GLENABLE
@@ -110,7 +144,7 @@ void fe_main()
 
 #ifdef FE_ASPECT_RATIO
     felog("next is glfwSetWindowSizeCallback");
-    glfwSetWindowSizeCallback(window.getWindow(), windowResizeCallback);
+    glfwSetWindowSizeCallback(window->getWindow(), windowResizeCallback);
 
     felog("calculating aspect_ratio...");
     GLFWmonitor * primaryMonitor = glfwGetPrimaryMonitor();
@@ -119,72 +153,38 @@ void fe_main()
     printf("VIDM:\n%d\n%d\n%f\n", mmode->width, mmode->height, aspect_ratio);
 #endif
 
-    felog("fe_main(): initializing camera...");
-    Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f));
-    glfwSetWindowUserPointer(window.getWindow(), &camera);
+    input = new Input();
 
-    felog("fe_main(): initializing imgui...");
-    setupImGui(window.getWindow());
+    // TODO: доделать ScriptManager
 
-
-    Model model("assets/models/sword/scene.gltf");
-    Input input;
     Shader txtShader("shaders/shader_txt.glsl");
     TextRenderer txtRenderer(txtShader, "assets/fonts/ProggyCleanRu.ttf", 40);
 
+    //ScriptManager fe_sm(window_ptr, shader_ptr, outlineShader_ptr, input_ptr);
+    FeTestApp fe_test;
+
     felog("fe_main(): entering main loop...");
-    while (!window.shouldClose() && !fe_status) {
+    while (!window->shouldClose() && !fe_status) {
         felog("fe_main(): polling events...");
-        window.pollEvents();
+        window->pollEvents();
         felog("fe_main(): clearing window...");
-        window.clear();
+        window->clear();
 
-        felog("fe_main(): checking input...");
-        input.checkInput(window.getWindow(), camera);
-        felog("fe_main(): updating camera...");
-        camera.updateMatrix(45.0f, 0.1f, 100.0f);
-
-        glStencilFunc(GL_ALWAYS, 1, 0xff);
-        glStencilMask(0xff);
-        model.draw(shader, camera);
-
-        glStencilFunc(GL_NOTEQUAL, 1, 0xff);
-        glStencilMask(0x00);
-        glDisable(GL_DEPTH_TEST);
-        outlineShader.bind();
-        outlineShader.setUniform("outlining", 0.08f);
-        model.draw(outlineShader, camera);
-
-        glStencilMask(0xff);
-        glStencilFunc(GL_ALWAYS, 0, 0xff);
-        glEnable(GL_DEPTH_TEST);
-
-        if (camera.showImGui) {
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
-
-            ImGui::ShowDemoWindow();
-
-            ImGui::Begin("Settings");
-                ImGui::SliderFloat("Speed", &camera.speed, 0.001, 0.5);
-            ImGui::End();
-
-
-            ImGui::Render();
-
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        }
+        fe_test.cycle();
 
         txtRenderer.RenderText(txtShader, "Sample text", 25.0f, 25.0f, .5f, glm::vec3(0.5, 0.8f, 0.2f));
         felog("fe_main(): swapping buffers...");
-        window.swapBuffers();
+        window->swapBuffers();
 
         felog("fe_main(): end of main loop");
     }
 
     felog("fe_main(): exiting main loop (end of fe_main)...");
-    shader.killShader();
-    window.killWindow();
+    shader->killShader();
+    window->killWindow();
+    delete input;
+    delete window;
+    delete shader;
+    delete outlineShader;
 }
 
