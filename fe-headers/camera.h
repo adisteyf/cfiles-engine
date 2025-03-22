@@ -21,14 +21,14 @@ public:
 
     float speed = 0.1f;
     float sensitivity = 50.0f;
-    float fov = 90.0f;
-    float near_plane = 0.1f;
-    float far_plane = 100.0f;
+    float fov;
+    float near_plane;
+    float far_plane;
     bool showImGui = false;
 
-    Camera(int w, int h, glm::vec3 pos) : w(w), h(h), pos(pos) {}
+    Camera(int w, int h, glm::vec3 pos, float FOVdeg, float near, float far) : w(w), h(h), pos(pos), fov(FOVdeg), near_plane(near), far_plane(far) {}
 
-    void updateMatrix(float FOVdeg, float nearPlane, float farPlane);
+    void updateMatrix(void);
     void matrix(Shader &shader, const char *uniform);
 };
 

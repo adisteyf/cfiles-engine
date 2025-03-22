@@ -92,7 +92,7 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
     if (camera) {
         camera->w = width;
         camera->h = height;
-        camera->updateMatrix(45.0f, 0.1f, 100.0f);
+        camera->updateMatrix();
     }
 }
 #endif
@@ -160,8 +160,7 @@ void fe_main()
     Shader txtShader("shaders/shader_txt.glsl");
     TextRenderer txtRenderer(txtShader, "assets/fonts/ProggyCleanRu.ttf", 40);
 
-    //ScriptManager fe_sm(window_ptr, shader_ptr, outlineShader_ptr, input_ptr);
-    FeTestApp fe_test;
+    FE_SCRIPTS
 
     felog("fe_main(): entering main loop...");
     while (!window->shouldClose() && !fe_status) {
@@ -170,7 +169,7 @@ void fe_main()
         felog("fe_main(): clearing window...");
         window->clear();
 
-        fe_test.cycle();
+        FE_CYCLE_SCRIPTS
 
         txtRenderer.RenderText(txtShader, "Sample text", 25.0f, 25.0f, .5f, glm::vec3(0.5, 0.8f, 0.2f));
         felog("fe_main(): swapping buffers...");

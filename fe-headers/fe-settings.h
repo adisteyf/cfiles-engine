@@ -18,11 +18,21 @@
     glEnable(GL_DEPTH_TEST); \
     glEnable(GL_DEBUG_OUTPUT); \
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); \
-    glEnable(GL_STENCIL_TEST); \
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); \
     glEnable(GL_BLEND); \
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-#define FE_ENABLE_STENCIL
+
+/*
+    glEnable(GL_STENCIL_TEST); \
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); \
+*/
+
+#define FE_SCRIPTS \
+    FeTestApp fe_test;
+
+#define FE_CYCLE_SCRIPTS \
+    fe_test.cycle();
+
+//#define FE_ENABLE_STENCIL
 
 #define RED "\033[31m"
 #define RESET "\033[0m"

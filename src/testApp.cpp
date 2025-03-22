@@ -4,21 +4,13 @@
 #include "shader.h"
 #include "window.h"
 #include "fe-settings.h"
+#include "main.h"
 
 /* ImGui */
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
-Input  * fe_getInput(void);
-Shader * fe_getShader(int type);
-Window * fe_getWindow(void);
-
-
-//Camera camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f));
-//Model model("assets/models/sword/scene.gltf");
-
-void setupImGui(GLFWwindow * window);
 
 
 FeTestApp::FeTestApp(void)
