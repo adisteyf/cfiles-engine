@@ -32,10 +32,10 @@
 
 
 
-Shader * shader = nullptr;
+Shader * shader        = nullptr;
 Shader * outlineShader = nullptr;
-Window * window = nullptr;
-Input  * input = nullptr;
+Window * window        = nullptr;
+Input  * input         = nullptr;
 
 Shader* fe_getShader(int type)
 {
@@ -154,12 +154,6 @@ void fe_main()
 #endif
 
     input = new Input();
-
-    // TODO: доделать ScriptManager
-
-    Shader txtShader("shaders/shader_txt.glsl");
-    TextRenderer txtRenderer(txtShader, "assets/fonts/ProggyCleanRu.ttf", 40);
-
     FE_SCRIPTS
 
     felog("fe_main(): entering main loop...");
@@ -171,7 +165,6 @@ void fe_main()
 
         FE_CYCLE_SCRIPTS
 
-        txtRenderer.RenderText(txtShader, "Sample text", 25.0f, 25.0f, .5f, glm::vec3(0.5, 0.8f, 0.2f));
         felog("fe_main(): swapping buffers...");
         window->swapBuffers();
 

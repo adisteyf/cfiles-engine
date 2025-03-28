@@ -1,4 +1,5 @@
 #include "input.h"
+#include "textRenderer.h"
 #include "window.h"
 #include "shader.h"
 #include "model.h"
@@ -13,6 +14,8 @@ private:
     Input  * input;
     Shader * shader;
     Shader * outlineShader;
+    Shader * txtShader;
+    TextRenderer * txtRenderer;
     Window * window;
     Camera * camera;
     Model  * model;

@@ -5,6 +5,7 @@
 #include "window.h"
 #include "fe-settings.h"
 #include "main.h"
+#include "textRenderer.h"
 
 /* ImGui */
 #include "imgui.h"
@@ -17,9 +18,11 @@ FeTestApp::FeTestApp(void)
     : input(fe_getInput()), 
       shader(fe_getShader(0)), 
       outlineShader(fe_getShader(1)), 
+      txtShader(new Shader("shaders/shader_txt.glsl")),
+      txtRenderer(new TextRenderer(*txtShader, "assets/fonts/ProggyCleanRu.ttf", 40)),
       window(fe_getWindow())
 {
-    camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f));
+    camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f), 45.0f, 0.1f, 100.0f);
     model  = new Model("assets/models/sword/scene.gltf");
 
     glfwSetWindowUserPointer(window->getWindow(), camera);
@@ -31,7 +34,7 @@ void FeTestApp::cycle(void)
     felog("fe_main(): checking input...");
     input->checkInput(window->getWindow(), *camera);
     felog("fe_main(): updating camera...");
-    camera->updateMatrix(45.0f, 0.1f, 100.0f);
+    camera->updateMatrix();
 
     glStencilFunc(GL_ALWAYS, 1, 0xff);
     glStencilMask(0xff);
@@ -64,4 +67,6 @@ void FeTestApp::cycle(void)
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
+
+    txtRenderer->RenderText(*txtShader, "Sample text", 25.0f, 25.0f, .5f, glm::vec3(0.5, 0.8f, 0.2f));
 }
