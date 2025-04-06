@@ -6,7 +6,6 @@
 #include "window.h"
 #include "shader.h"
 #include "model.h"
-#include "rayCollision.h"
 
 class FeTestApp
 {
