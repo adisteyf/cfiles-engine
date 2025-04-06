@@ -22,13 +22,14 @@ public:
     Model(const char * name);
     void draw(Shader &shader, Camera &camera);
     std::string get_file_contents(const char* filename);
+    void changePos(void);
+    std::vector<Mesh> meshes;
+    std::vector<glm::vec3> translationMeshes;
 private:
     const char * file;
     std::vector<unsigned char> data;
     json JSON;
 
-    std::vector<Mesh> meshes;
-    std::vector<glm::vec3> translationMeshes;
     std::vector<glm::quat> rotationsMeshes;
     std::vector<glm::vec3> scalesMeshes;
     std::vector<glm::mat4> matricesMeshes;

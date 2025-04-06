@@ -32,10 +32,11 @@ void Input::checkInput(GLFWwindow * window, Camera &cam)
             //cam.speed = 0.1f;
         }
 
-
+        #ifdef LOG_LEVEL_INFO
         std::cout << cam.pos.x << std::endl;
         std::cout << cam.pos.y << std::endl;
         std::cout << cam.pos.z << std::endl;
+        #endif
 
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !cam.showImGui) {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);

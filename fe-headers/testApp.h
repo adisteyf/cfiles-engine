@@ -1,14 +1,19 @@
+#include "FBO.h"
+#include "glad/glad.h"
+#include "GLFW/glfw3.h"
 #include "input.h"
 #include "textRenderer.h"
 #include "window.h"
 #include "shader.h"
 #include "model.h"
+#include "rayCollision.h"
 
 class FeTestApp
 {
 public:
     FeTestApp(void);
     void cycle(void);
+    void free(void);
 
 private:
     Input  * input;
@@ -19,4 +24,6 @@ private:
     Window * window;
     Camera * camera;
     Model  * model;
+    FBO    * fbo;
+    Shader * fboShader;
 };

@@ -18,6 +18,8 @@ public:
     glm::vec3 orientation = glm::vec3(0.1f, -0.4f, 0.9f);
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::mat4 cameraMatrix = glm::mat4(1.0f);
+    glm::mat4 projection = glm::mat4(1.f);
+    glm::mat4 view = glm::mat4(1.f);
 
     float speed = 0.1f;
     float sensitivity = 50.0f;
