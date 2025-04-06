@@ -106,6 +106,12 @@ void Shader::setUniform(const char *name, int val)
     if (location != -1) glUniform1i(location, val);
 }
 
+void Shader::setUniform(const char *name, unsigned int val)
+{
+    int location = glGetUniformLocation(program, name);
+    if (location != -1) glUniform1ui(location, val);
+}
+
 void Shader::setUniform(const char *name, float val)
 {
     int location = glGetUniformLocation(program, name);
@@ -132,7 +138,7 @@ void Shader::setUniform(const char *name, glm::vec3 val)
 
 
 /* destroy shader functions */
-void Shader::killShader()
+Shader::~Shader()
 {
     glDeleteProgram(program);
     freeShader();
@@ -143,7 +149,6 @@ void Shader::freeShader()
     glDeleteShader(vs);
     glDeleteShader(fs);
 }
-
 
 GLuint Shader::getProgram()
 {

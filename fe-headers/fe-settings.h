@@ -6,21 +6,22 @@
 /* settings for fe-kernel */
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
+#define FE_CLEARCOLOR 0.34f, 0.6f, 1.0f, 1.f
 
-#define LOG_LEVEL_INFO
+//#define LOG_LEVEL_INFO
 
 #define FE_GLFW_MAJOR 4
 #define FE_GLFW_MINOR 3
 
 #define FE_GLFW_NO_SETCURSOR /* if glfwSetCursorPos() didn't work */
-#define FE_ASPECT_RATIO
+//#define FE_ASPECT_RATIO
 #define FE_GLENABLE \
     glEnable(GL_DEPTH_TEST); \
     glEnable(GL_DEBUG_OUTPUT); \
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); \
     glEnable(GL_BLEND); \
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); \
-    glEnable(GL_STENCIL_TEST); \
+    /*glEnable(GL_STENCIL_TEST); */\
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
 #define FE_SCRIPTS \
@@ -29,7 +30,11 @@
 #define FE_CYCLE_SCRIPTS \
     fe_test.cycle();
 
-#define FE_ENABLE_STENCIL
+#define FE_FREE_SCRIPTS \
+    fe_test.free();
+
+
+//#define FE_ENABLE_STENCIL
 
 #define RED "\033[31m"
 #define RESET "\033[0m"

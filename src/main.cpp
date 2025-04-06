@@ -2,11 +2,13 @@
 #include <glad/glad.h>
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
+#include <glm/geometric.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 /* fe-headers */
+#include "FBO.h"
 #include "fe-kernel.h"
 #include "fe-settings.h"
 #include "window.h"
@@ -24,6 +26,7 @@
 #include "imgui_impl_opengl3.h"
 
 /* std */
+#include <glm/matrix.hpp>
 #include <optional>
 
 
@@ -97,6 +100,32 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 }
 #endif
 
+/*void mouseButtonCallback(GLFWwindow * window, int button, int action, int mods)
+{
+    if (button==GLFW_MOUSE_BUTTON_RIGHT && action==GLFW_PRESS) {
+        double mouseX, mouseY;
+        Camera * camera = static_cast<Camera*>(glfwGetWindowUserPointer(window)); 
+        glfwGetCursorPos(window, &mouseX, &mouseY);
+
+        float x = (2.f*mouseX) / camera->w - 1.0f;
+        float y = 1.0f - (2.f*mouseY) / camera->h;
+        float z = 1.0f;
+
+        glm::vec3 ray_nds = glm::vec3(x,y,z);
+
+
+        glm::vec4 ray_clip  = glm::vec4(ray_nds.x, ray_nds.y, -1.f, 1.f);
+        glm::vec4 ray_eye   = glm::inverse(camera->projection) * ray_clip;
+        ray_eye             = glm::vec4(ray_eye.x, ray_eye.y, -1.f, 0.f);
+        glm::vec3 ray_world = glm::normalize(glm::vec3(glm::inverse(camera->cameraMatrix) * ray_eye));
+
+        std::cout << "ray_world" << std::endl;
+        std::cout << ray_world.x << " ";
+        std::cout << ray_world.y << " ";
+        std::cout << ray_world.z << std::endl;
+    }
+}*/
+
 
 
 void setupImGui(GLFWwindow * window)
@@ -153,6 +182,8 @@ void fe_main()
     printf("VIDM:\n%d\n%d\n%f\n", mmode->width, mmode->height, aspect_ratio);
 #endif
 
+    //glfwSetMouseButtonCallback(window->getWindow(), mouseButtonCallback);
+
     input = new Input();
     FE_SCRIPTS
 
@@ -172,7 +203,7 @@ void fe_main()
     }
 
     felog("fe_main(): exiting main loop (end of fe_main)...");
-    shader->killShader();
+    FE_FREE_SCRIPTS
     window->killWindow();
     delete input;
     delete window;

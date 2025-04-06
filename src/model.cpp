@@ -1,4 +1,5 @@
 #include "model.h"
+#include <ostream>
 
 void model_textissetted() {
     printf("test is setted\n");
@@ -14,6 +15,18 @@ Model::Model(const char * file)
 
     traverseNode(0);
 }
+
+void Model::changePos(void)
+{
+    /*for (unsigned int i=0; i<meshes.size(); ++i) {
+        for (unsigned int j=0; j<meshes[i].vertices.size(); ++j) {
+            meshes[i].vertices[j].position.x += 0.01f;
+        }
+        meshes[i].updateVBO();
+    }*/
+    std::cout << "meshesinmdl: " << meshes.size() << std::endl;
+} // TODO: доделать
+
 
 void Model::draw(Shader &shader, Camera &camera)
 {
