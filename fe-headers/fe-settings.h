@@ -14,7 +14,7 @@
 #define FE_GLFW_MINOR 3
 
 #define FE_GLFW_NO_SETCURSOR /* if glfwSetCursorPos() didn't work */
-//#define FE_ASPECT_RATIO
+#define FE_ASPECT_RATIO
 #define FE_GLENABLE \
     glEnable(GL_DEPTH_TEST); \
     glEnable(GL_DEBUG_OUTPUT); \
@@ -25,14 +25,19 @@
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
 #define FE_SCRIPTS \
-    FeTestApp fe_test;
+    FeTestApp * fe_test;
+
+#define FE_SCRIPTS_START \
+    fe_test = new FeTestApp();
 
 #define FE_CYCLE_SCRIPTS \
-    fe_test.cycle();
+    fe_test->cycle();
 
 #define FE_FREE_SCRIPTS \
-    fe_test.free();
+    fe_test->free();
 
+#define FE_WINRESIZE_SCRIPTS \
+    fe_test->winresize_callback(window, width, height);
 
 //#define FE_ENABLE_STENCIL
 

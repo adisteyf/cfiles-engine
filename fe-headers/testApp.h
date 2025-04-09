@@ -13,6 +13,7 @@ public:
     FeTestApp(void);
     void cycle(void);
     void free(void);
+    void winresize_callback(GLFWwindow* window, int width, int height);
 
 private:
     Input  * input;
