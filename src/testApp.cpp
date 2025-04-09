@@ -103,6 +103,13 @@ void FeTestApp::cycle(void)
     txtRenderer->RenderText(*txtShader, "Sample text", 25.0f, 25.0f, .5f, glm::vec3(0.5, 0.8f, 0.2f));
 }
 
+void FeTestApp::winresize_callback(GLFWwindow * window, int width, int height)
+{
+    fbo->free();
+    delete fbo;
+    fbo = new FBO(width,height);
+}
+
 void FeTestApp::free(void)
 {
     delete txtShader;

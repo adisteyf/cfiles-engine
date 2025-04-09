@@ -40,9 +40,9 @@ void FBO::setModelID(Shader& fboShader, uint objectID)
     uint g = (objectID >> 8) & 0xFFu;
     uint b = objectID & 0xFFu;
 
-    fboShader.setUniform("objectR", 0u);
-    fboShader.setUniform("objectG", 0u);
-    fboShader.setUniform("objectB", 1u);
+    fboShader.setUniform("objectR", r);
+    fboShader.setUniform("objectG", g);
+    fboShader.setUniform("objectB", b);
 }
 
 void FBO::free()

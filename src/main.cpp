@@ -39,6 +39,7 @@ Shader * shader        = nullptr;
 Shader * outlineShader = nullptr;
 Window * window        = nullptr;
 Input  * input         = nullptr;
+FE_SCRIPTS
 
 Shader* fe_getShader(int type)
 {
@@ -77,8 +78,10 @@ void fe_preWorkFuncs(void)
 
 #ifdef FE_ASPECT_RATIO
 float aspect_ratio = 0;
-
+#endif
 void windowResizeCallback(GLFWwindow* window, int width, int height) {
+    FE_WINRESIZE_SCRIPTS
+#ifdef FE_ASPECT_RATIO
     float currentAspectRatio = (float)width / (float)height;
 
     if (currentAspectRatio > aspect_ratio) {
@@ -97,8 +100,8 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
         camera->h = height;
         camera->updateMatrix();
     }
-}
 #endif
+}
 
 /*void mouseButtonCallback(GLFWwindow * window, int button, int action, int mods)
 {
@@ -185,7 +188,7 @@ void fe_main()
     //glfwSetMouseButtonCallback(window->getWindow(), mouseButtonCallback);
 
     input = new Input();
-    FE_SCRIPTS
+    FE_SCRIPTS_START
 
     felog("fe_main(): entering main loop...");
     while (!window->shouldClose() && !fe_status) {
