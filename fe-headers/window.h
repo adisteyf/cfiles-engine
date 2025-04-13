@@ -6,6 +6,9 @@
 #include <iostream>
 #include "fe-kernel.h"
 
+#define WINDOW_SETRESIZECB \
+    glfwSetWindowSizeCallback(window->getWindow(), windowResizeCallback);
+
 class Window {
 private:
     GLFWwindow* window;
@@ -29,5 +32,9 @@ public:
     static void terminateGLFW() { glfwTerminate(); }
     void killWindow();
 };
+
+void windowResizeCallback(GLFWwindow* window, int width, int height);
+void fe_GLContext(void);
+void windowGetAspectRatio();
 
 #endif // WINDOW_CLASS_FE

@@ -27,6 +27,9 @@
 #define FE_SCRIPTS \
     FeTestApp * fe_test;
 
+#define FE_SCRIPTS_EXTERN \
+    extern FeTestApp * fe_test;
+
 #define FE_SCRIPTS_START \
     fe_test = new FeTestApp();
 
