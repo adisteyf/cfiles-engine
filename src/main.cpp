@@ -33,8 +33,10 @@
 
 
 
-
-
+#ifdef FE_ENABLE_FBOPICKING
+FBO    * fboPicking       = nullptr;
+Shader * pickingShader    = nullptr;
+#endif
 Shader * shader        = nullptr;
 Shader * outlineShader = nullptr;
 Window * window        = nullptr;
@@ -58,17 +60,6 @@ Input* fe_getInput(void) {
     return input;
 }
 
-
-
-void fe_GLContext(void)
-{
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, FE_GLFW_MAJOR);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, FE_GLFW_MINOR);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
-    glfwWindowHint(GLFW_STENCIL_BITS, 8);
-}
-
 void fe_preWorkFuncs(void)
 {
     Window::initGLFW();
@@ -76,58 +67,8 @@ void fe_preWorkFuncs(void)
 }
 
 
-#ifdef FE_ASPECT_RATIO
-float aspect_ratio = 0;
-#endif
-void windowResizeCallback(GLFWwindow* window, int width, int height) {
-    FE_WINRESIZE_SCRIPTS
-#ifdef FE_ASPECT_RATIO
-    float currentAspectRatio = (float)width / (float)height;
+extern float aspect_ratio;
 
-    if (currentAspectRatio > aspect_ratio) {
-        int viewportWidth = (int)(height * aspect_ratio);
-        int viewportX = (width - viewportWidth) / 2;
-        glViewport(viewportX, 0, viewportWidth, height);
-    } else {
-        int viewportHeight = (int)(width / aspect_ratio);
-        int viewportY = (height - viewportHeight) / 2;
-        glViewport(0, viewportY, width, viewportHeight);
-    }
-
-    Camera* camera = static_cast<Camera*>(glfwGetWindowUserPointer(window));
-    if (camera) {
-        camera->w = width;
-        camera->h = height;
-        camera->updateMatrix();
-    }
-#endif
-}
-
-/*void mouseButtonCallback(GLFWwindow * window, int button, int action, int mods)
-{
-    if (button==GLFW_MOUSE_BUTTON_RIGHT && action==GLFW_PRESS) {
-        double mouseX, mouseY;
-        Camera * camera = static_cast<Camera*>(glfwGetWindowUserPointer(window)); 
-        glfwGetCursorPos(window, &mouseX, &mouseY);
-
-        float x = (2.f*mouseX) / camera->w - 1.0f;
-        float y = 1.0f - (2.f*mouseY) / camera->h;
-        float z = 1.0f;
-
-        glm::vec3 ray_nds = glm::vec3(x,y,z);
-
-
-        glm::vec4 ray_clip  = glm::vec4(ray_nds.x, ray_nds.y, -1.f, 1.f);
-        glm::vec4 ray_eye   = glm::inverse(camera->projection) * ray_clip;
-        ray_eye             = glm::vec4(ray_eye.x, ray_eye.y, -1.f, 0.f);
-        glm::vec3 ray_world = glm::normalize(glm::vec3(glm::inverse(camera->cameraMatrix) * ray_eye));
-
-        std::cout << "ray_world" << std::endl;
-        std::cout << ray_world.x << " ";
-        std::cout << ray_world.y << " ";
-        std::cout << ray_world.z << std::endl;
-    }
-}*/
 
 
 
@@ -149,7 +90,7 @@ void fe_main()
     fe_preWorkFuncs();
     felog("fe_main(): initializing window...");
     window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, "Files Engine");
-    
+
     felog("fe_main(): initializing shader...");
     shader = new Shader("shaders/shader_def.glsl");
     outlineShader = new Shader("shaders/outline_shader.glsl");
@@ -174,20 +115,18 @@ void fe_main()
     felog("next is glDebugMessageCallback");
     glDebugMessageCallback(debugCallback, 0);
 
+    felog("next is setWindowSizeCallback");
+    WINDOW_SETRESIZECB
 #ifdef FE_ASPECT_RATIO
-    felog("next is glfwSetWindowSizeCallback");
-    glfwSetWindowSizeCallback(window->getWindow(), windowResizeCallback);
-
     felog("calculating aspect_ratio...");
-    GLFWmonitor * primaryMonitor = glfwGetPrimaryMonitor();
-    const GLFWvidmode * mmode = glfwGetVideoMode(primaryMonitor);
-    aspect_ratio = (float)mmode->width / (float)mmode->height;
-    printf("VIDM:\n%d\n%d\n%f\n", mmode->width, mmode->height, aspect_ratio);
+    windowGetAspectRatio();
 #endif
 
-    //glfwSetMouseButtonCallback(window->getWindow(), mouseButtonCallback);
-
     input = new Input();
+#   ifdef FE_ENABLE_FBOPICKING
+    fboPicking = new FBO(window->getWidth(), window->getHeight());
+    fboShader = new Shader("shaders/pickingShader.glsl");
+#   endif
     FE_SCRIPTS_START
 
     felog("fe_main(): entering main loop...");
@@ -212,5 +151,8 @@ void fe_main()
     delete window;
     delete shader;
     delete outlineShader;
+#   ifdef FE_ENABLE_FBOPICKING
+    delete fboPicking;
+#   endif
 }
 

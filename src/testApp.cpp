@@ -15,7 +15,7 @@
 #include <cmath>
 #include <ostream>
 
-
+// TODO: Add Main Camera ptr in main.cpp and add patch FE_ENABLE_FBOPICKING
 
 FeTestApp::FeTestApp(void)
     : input(fe_getInput()), 
