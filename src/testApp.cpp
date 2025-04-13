@@ -12,6 +12,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include <GLFW/glfw3.h>
 #include <cmath>
 #include <ostream>
 
@@ -34,18 +35,21 @@ FeTestApp::FeTestApp(void)
     fboShader = new Shader("shaders/pickingShader.glsl");
 }
 
+extern "C" {
+  void zigGreetings();
+}
+
 void FeTestApp::cycle(void)
 {
     felog("fe_main(): checking input...");
     input->checkInput(window, *camera);
 
-    if (glfwGetMouseButton(window->getWindow(), GLFW_MOUSE_BUTTON_RIGHT)==GLFW_PRESS) {
-        bool isCollide = false;
+    if (window->windowGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT, GLFW_PRESS)) {
         double mouseX, mouseY;
         glfwGetCursorPos(window->getWindow(), &mouseX, &mouseY);
         uint modelID = fbo->getModelID((int)mouseX, (int)mouseY);
 
-        std::cout << "ID в big-endian: " << modelID << std::endl;
+        std::cout << "ID in big-endian: " << modelID << std::endl;
     }
 
     felog("fe_main(): updating camera...");
@@ -63,6 +67,7 @@ void FeTestApp::cycle(void)
     fboShader->bind();
     fbo->setModelID(*fboShader, 2u);
     model->draw(*fboShader, *camera);
+    zigGreetings();
     fbo->unbind();
     shader->bind();
 
