@@ -31,6 +31,12 @@ public:
     static void initGLFW();
     static void terminateGLFW() { glfwTerminate(); }
     void killWindow();
+    bool windowGetKey(int key, int state);
+    bool windowGetMouseButton(int key, int state);
+    void hideCursor();
+    void normalCursor();
+    void setCursorPos(double x, double y);
+    void getCursorPos(double *x, double *y);
 };
 
 void windowResizeCallback(GLFWwindow* window, int width, int height);

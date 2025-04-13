@@ -37,7 +37,7 @@ FeTestApp::FeTestApp(void)
 void FeTestApp::cycle(void)
 {
     felog("fe_main(): checking input...");
-    input->checkInput(window->getWindow(), *camera);
+    input->checkInput(window, *camera);
 
     if (glfwGetMouseButton(window->getWindow(), GLFW_MOUSE_BUTTON_RIGHT)==GLFW_PRESS) {
         bool isCollide = false;
