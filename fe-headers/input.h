@@ -8,12 +8,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "imgui.h"
 #include "camera.h"
+#include "window.h"
 
 class Input {
     public:
         int showImGuiState = GLFW_RELEASE;
         bool firstClick = true;
-        void checkInput(GLFWwindow * window, Camera &cam);
+        void checkInput(Window * window, Camera &cam);
 };
 
 #endif // FE_INPUT

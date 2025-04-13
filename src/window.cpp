@@ -92,3 +92,27 @@ void windowGetAspectRatio() {
     printf("VIDM:\n%d\n%d\n%f\n", mmode->width, mmode->height, aspect_ratio);
 }
 #endif
+
+bool Window::windowGetKey(int key, int state) {
+    return glfwGetKey(window, key) == state;
+}
+
+bool Window::windowGetMouseButton(int key, int state) {
+    return glfwGetMouseButton(window, key) == state;
+}
+
+void Window::hideCursor() {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+}
+
+void Window::normalCursor() {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+}
+
+void Window::setCursorPos(double x, double y) {
+    glfwSetCursorPos(window, x, y);
+}
+
+void Window::getCursorPos(double *x, double *y) {
+    glfwGetCursorPos(window, x, y);
+}
