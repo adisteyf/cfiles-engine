@@ -11,10 +11,10 @@
 #include "window.h"
 
 class Input {
-    public:
-        int showImGuiState = GLFW_RELEASE;
-        bool firstClick = true;
-        void checkInput(Window * window, Camera &cam);
+public:
+    int showImGuiState = GLFW_RELEASE;
+    bool firstClick = true;
+    void checkInput(Window * window, Camera &cam);
 };
 
 #endif // FE_INPUT
