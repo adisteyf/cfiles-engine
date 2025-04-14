@@ -7,6 +7,7 @@
 #include "fe-settings.h"
 #include "main.h"
 #include "textRenderer.h"
+#include "fe-logic.h"
 
 /* ImGui */
 #include "imgui.h"
@@ -33,10 +34,8 @@ FeTestApp::FeTestApp(void)
     setupImGui(window->getWindow());
     fbo = new FBO(window->getWidth(), window->getHeight());
     fboShader = new Shader("shaders/pickingShader.glsl");
-}
 
-extern "C" {
-  void zigGreetings();
+    addModel(model);
 }
 
 void FeTestApp::cycle(void)
@@ -67,7 +66,9 @@ void FeTestApp::cycle(void)
     fboShader->bind();
     fbo->setModelID(*fboShader, 2u);
     model->draw(*fboShader, *camera);
-    zigGreetings();
+    //zigGreetings();
+    printf("MODELPTR: %p\n", getModel(0));
+    printf("REALPTR: %p\n", model);
     fbo->unbind();
     shader->bind();
 

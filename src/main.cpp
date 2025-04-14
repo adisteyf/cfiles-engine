@@ -66,9 +66,9 @@ void fe_preWorkFuncs(void)
     fe_GLContext();
 }
 
-
+#ifdef FE_ASPECT_RATIO
 extern float aspect_ratio;
-
+#endif
 
 
 
