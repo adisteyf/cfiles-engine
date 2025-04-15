@@ -8,11 +8,12 @@
 #define WINDOW_HEIGHT 800
 #define FE_CLEARCOLOR 0.34f, 0.6f, 1.0f, 1.f
 
-//#define LOG_LEVEL_INFO
+#define LOG_LEVEL_INFO
 
 #define FE_GLFW_MAJOR 4
 #define FE_GLFW_MINOR 3
 
+#define FE_ENABLE_FBOPICKING
 #define FE_GLFW_NO_SETCURSOR /* if glfwSetCursorPos() didn't work */
 #define FE_ASPECT_RATIO
 #define FE_GLENABLE \

@@ -32,8 +32,6 @@ FeTestApp::FeTestApp(void)
 
     glfwSetWindowUserPointer(window->getWindow(), camera);
     setupImGui(window->getWindow());
-    fbo = new FBO(window->getWidth(), window->getHeight());
-    fboShader = new Shader("shaders/pickingShader.glsl");
 
     addModel(model);
 }
@@ -42,6 +40,8 @@ void FeTestApp::cycle(void)
 {
     felog("fe_main(): checking input...");
     input->checkInput(window, *camera);
+    FBO * fbo = fe_getFBO();
+    Shader * fboShader = fe_getShader(2);
 
     if (window->windowGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT, GLFW_PRESS)) {
         double mouseX, mouseY;
@@ -109,9 +109,6 @@ void FeTestApp::cycle(void)
 
 void FeTestApp::winresize_callback(GLFWwindow * window, int width, int height)
 {
-    fbo->free();
-    delete fbo;
-    fbo = new FBO(width,height);
 }
 
 void FeTestApp::free(void)
@@ -121,7 +118,4 @@ void FeTestApp::free(void)
     delete camera;
     Model * model = getModel(0);
     delete model;
-    fbo->free();
-    delete fbo;
-    delete fboShader;
 }

@@ -1,6 +1,7 @@
 #include "window.h"
 #include "fe-settings.h"
 #include "testApp.h"
+#include "main.h"
 
 Window::Window(int w, int h, const char* t) : width(w), height(h), title(t)
 {
@@ -52,6 +53,11 @@ FE_SCRIPTS_EXTERN
 float aspect_ratio = 0;
 #endif
 void windowResizeCallback(GLFWwindow* window, int width, int height) {
+#   ifdef FE_ENABLE_FBOPICKING
+    extern FBO * fboPicking;
+    delete fboPicking;
+    fboPicking = new FBO(width,height);
+#   endif
     FE_WINRESIZE_SCRIPTS
 #ifdef FE_ASPECT_RATIO
     float currentAspectRatio = (float)width / (float)height;
