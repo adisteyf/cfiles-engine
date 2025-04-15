@@ -48,9 +48,18 @@ Shader* fe_getShader(int type)
     switch (type) {
         case 0: return shader;
         case 1: return outlineShader;
+#       ifdef FE_ENABLE_FBOPICKING
+        case 2: return pickingShader;
+#       endif
         default: return 0;
     }
 }
+
+#ifdef FE_ENABLE_FBOPICKING
+FBO * fe_getFBO(void) {
+    return fboPicking;
+}
+#endif
 
 Window* fe_getWindow(void) {
     return window;
@@ -125,7 +134,7 @@ void fe_main()
     input = new Input();
 #   ifdef FE_ENABLE_FBOPICKING
     fboPicking = new FBO(window->getWidth(), window->getHeight());
-    fboShader = new Shader("shaders/pickingShader.glsl");
+    pickingShader = new Shader("shaders/pickingShader.glsl");
 #   endif
     FE_SCRIPTS_START
 
@@ -153,6 +162,7 @@ void fe_main()
     delete outlineShader;
 #   ifdef FE_ENABLE_FBOPICKING
     delete fboPicking;
+    delete pickingShader;
 #   endif
 }
 

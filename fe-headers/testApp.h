@@ -23,6 +23,4 @@ private:
     TextRenderer * txtRenderer;
     Window * window;
     Camera * camera;
-    FBO    * fbo;
-    Shader * fboShader;
 };

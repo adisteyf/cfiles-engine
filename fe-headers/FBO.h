@@ -11,6 +11,7 @@ public:
     int width, height;
     
     FBO(int width, int height);
+    ~FBO() { free(); }
     void free();
     void bind();
     void unbind();
