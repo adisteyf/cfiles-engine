@@ -28,7 +28,7 @@ FeTestApp::FeTestApp(void)
       window(fe_getWindow())
 {
     camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f), 45.0f, 0.1f, 100.0f);
-    model  = new Model("assets/models/bunny/scene.gltf");
+    Model * model = new Model("assets/models/bunny/scene.gltf");
 
     glfwSetWindowUserPointer(window->getWindow(), camera);
     setupImGui(window->getWindow());
@@ -65,10 +65,8 @@ void FeTestApp::cycle(void)
     );
     fboShader->bind();
     fbo->setModelID(*fboShader, 2u);
+    Model * model = getModel(0);
     model->draw(*fboShader, *camera);
-    //zigGreetings();
-    printf("MODELPTR: %p\n", getModel(0));
-    printf("REALPTR: %p\n", model);
     fbo->unbind();
     shader->bind();
 
@@ -121,6 +119,7 @@ void FeTestApp::free(void)
     delete txtShader;
     delete txtRenderer;
     delete camera;
+    Model * model = getModel(0);
     delete model;
     fbo->free();
     delete fbo;
