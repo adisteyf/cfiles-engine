@@ -1,10 +1,6 @@
 #include "model.h"
 #include <ostream>
 
-void model_textissetted() {
-    printf("test is setted\n");
-}
-
 Model::Model(const char * file)
 {
     std::string text = get_file_contents(file);
@@ -369,4 +365,12 @@ std::vector<glm::vec4> Model::groupFloatsVec4(std::vector<float> floatVec)
 		}
 	}
 	return vectors;
+}
+
+extern "C" {
+  void deleteModelC(void * ptr) {
+    Model * tmp = (Model *) ptr;
+    printf("deleting model: %p\n", tmp);
+    delete tmp;
+  }
 }

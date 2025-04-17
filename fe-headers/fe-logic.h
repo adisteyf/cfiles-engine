@@ -8,6 +8,7 @@ extern "C" {
   void    zigGreetings ();
   void    addModel (Model * modelptr);
   Model * getModel (size_t index);
+  void    deleteModels ();
 }
 
 #endif // FE_LOGIC

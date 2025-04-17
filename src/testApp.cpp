@@ -17,8 +17,6 @@
 #include <cmath>
 #include <ostream>
 
-// TODO: Add Main Camera ptr in main.cpp and add patch FE_ENABLE_FBOPICKING
-
 FeTestApp::FeTestApp(void)
     : input(fe_getInput()), 
       shader(fe_getShader(0)), 
@@ -116,6 +114,5 @@ void FeTestApp::free(void)
     delete txtShader;
     delete txtRenderer;
     delete camera;
-    Model * model = getModel(0);
-    delete model;
+    deleteModels();
 }
