@@ -9,6 +9,7 @@ const c = @cImport({
     @cInclude("stdio.h");
 });
 
+pub extern fn deleteModelC(modelptr: *c_void) void;
 pub export fn zigGreetings() void {
     print("hello from zig!\n", .{});
 }
@@ -34,4 +35,10 @@ pub export fn getModel(index: usize) *c_void {
     }
 
     return model_list.items[index];
+}
+
+pub export fn deleteModels() void {
+    for (model_list.items) |model| {
+        deleteModelC(model);
+    }
 }
