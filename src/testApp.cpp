@@ -52,15 +52,7 @@ void FeTestApp::cycle(void)
     felog("fe_main(): updating camera...");
     camera->updateMatrix();
     fbo->bind();
-    glClearColor(
-        0.f,0.f,0.f,1.f
-    );
-    glClear
-    (
-        GL_COLOR_BUFFER_BIT
-        | GL_DEPTH_BUFFER_BIT
-        | GL_STENCIL_BUFFER_BIT
-    );
+    window->clearBlack();
     fboShader->bind();
     fbo->setModelID(*fboShader, 2u);
     Model * model = getModel(0);
@@ -114,5 +106,4 @@ void FeTestApp::free(void)
     delete txtShader;
     delete txtRenderer;
     delete camera;
-    deleteModels();
 }

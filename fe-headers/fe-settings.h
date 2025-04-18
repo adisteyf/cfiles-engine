@@ -1,6 +1,7 @@
 #ifndef FE_SETTINGS_H
 #define FE_SETTINGS_H
 
+#include "VAO.h"
 #include <iostream>
 
 /* settings for fe-kernel */
@@ -44,6 +45,15 @@
     fe_test->winresize_callback(window, width, height);
 
 //#define FE_ENABLE_STENCIL
+
+const int FE_CLEARFLAGS =
+GL_COLOR_BUFFER_BIT
+| GL_DEPTH_BUFFER_BIT
+#ifdef FE_ENABLE_STENCIL
+| GL_STEGL_STENCIL_BUFFER_BIT
+#endif
+;
+
 
 #define RED "\033[31m"
 #define RESET "\033[0m"

@@ -10,6 +10,7 @@
 /* fe-headers */
 #include "FBO.h"
 #include "fe-kernel.h"
+#include "fe-logic.h"
 #include "fe-settings.h"
 #include "window.h"
 #include "camera.h"
@@ -163,5 +164,6 @@ void fe_main()
     delete fboPicking;
     delete pickingShader;
 #   endif
+    deleteModels();
 }
 

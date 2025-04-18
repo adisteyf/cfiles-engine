@@ -42,3 +42,7 @@ pub export fn deleteModels() void {
         deleteModelC(model);
     }
 }
+
+pub export fn getModelsLen() usize {
+    return model_list.items.len;
+}

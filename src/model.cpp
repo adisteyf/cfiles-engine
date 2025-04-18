@@ -367,8 +367,12 @@ std::vector<glm::vec4> Model::groupFloatsVec4(std::vector<float> floatVec)
 	return vectors;
 }
 
+bool forDebug = false;
+void testmdl () { puts("double deleting"); }
 extern "C" {
   void deleteModelC(void * ptr) {
+    if (forDebug) { testmdl(); }
+    forDebug = true;
     Model * tmp = (Model *) ptr;
     printf("deleting model: %p\n", tmp);
     delete tmp;

@@ -31,14 +31,12 @@ void Window::clear() {
     glClearColor(
         FE_CLEARCOLOR
     );
-    glClear
-    (
-        GL_COLOR_BUFFER_BIT
-        | GL_DEPTH_BUFFER_BIT
-#ifdef FE_ENABLE_STENCIL
-        | GL_STENCIL_BUFFER_BIT
-#endif
-    );
+    glClear(FE_CLEARFLAGS);
+}
+
+void Window::clearBlack() {
+    glClearColor(0.f,0.f,0.f,1.f);
+    glClear(FE_CLEARFLAGS);
 }
 
 void Window::initGLFW() {
