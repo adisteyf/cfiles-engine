@@ -13,6 +13,7 @@ Window * fe_getWindow(void);
 #ifdef FE_ENABLE_FBOPICKING
 FBO    * fe_getFBO(void);
 #endif
+Camera * fe_getMainCamera(void);
 
 void setupImGui(GLFWwindow * window);
 

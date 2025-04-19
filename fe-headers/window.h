@@ -28,6 +28,7 @@ public:
     int getHeight() const { return height; }
 
     void clear();
+    void clearBlack();
     static void initGLFW();
     static void terminateGLFW() { glfwTerminate(); }
     void killWindow();

@@ -1,4 +1,5 @@
 #include "model.h"
+#include "main.h"
 #include <ostream>
 
 Model::Model(const char * file)
@@ -26,9 +27,16 @@ void Model::changePos(void)
 
 void Model::draw(Shader &shader, Camera &camera)
 {
-    for (unsigned int i=0; i<meshes.size(); i++)
-    {
+    for (unsigned int i=0; i<meshes.size(); i++) {
         meshes[i].Mesh::draw(shader, camera, matricesMeshes[i]);
+    }
+}
+
+void Model::draw(Shader &shader)
+{
+    Camera * camera = fe_getMainCamera();
+    for (unsigned int i=0; i<meshes.size(); i++) {
+        meshes[i].Mesh::draw(shader, *camera, matricesMeshes[i]);
     }
 }
 
@@ -372,5 +380,11 @@ extern "C" {
     Model * tmp = (Model *) ptr;
     printf("deleting model: %p\n", tmp);
     delete tmp;
+  }
+
+  void drawModelC(void * ptr, void * shptr) {
+    Model  * mdl = (Model *)ptr;
+    Shader * sdr = (Shader *)shptr;
+    mdl->draw(*sdr);
   }
 }

@@ -90,6 +90,9 @@ TextRenderer::TextRenderer(Shader &shader, std::string font_path, int font_size)
 
 void TextRenderer::RenderText(Shader &shader, std::string text, float x, float y, float scale, glm::vec3 color)
 {
+#   ifdef FE_ENABLE_CULLFACE
+    glDisable(GL_CULL_FACE);
+#   endif
     shader.bind();
     shader.setUniform("textColor", color);
     glActiveTexture(GL_TEXTURE0);
@@ -129,4 +132,7 @@ void TextRenderer::RenderText(Shader &shader, std::string text, float x, float y
 
     vao.unbind();
     glBindTexture(GL_TEXTURE_2D, 0);
+#   ifdef FE_ENABLE_CULLFACE
+    glDisable(GL_CULL_FACE);
+#   endif
 }

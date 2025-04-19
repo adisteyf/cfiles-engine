@@ -17,6 +17,9 @@
 #include <cmath>
 #include <ostream>
 
+extern Camera * mainCamera;
+extern Shader * modelDrawShader;
+
 FeTestApp::FeTestApp(void)
     : input(fe_getInput()), 
       shader(fe_getShader(0)), 
@@ -26,6 +29,7 @@ FeTestApp::FeTestApp(void)
       window(fe_getWindow())
 {
     camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f), 45.0f, 0.1f, 100.0f);
+    mainCamera = camera;
     Model * model = new Model("assets/models/bunny/scene.gltf");
 
     glfwSetWindowUserPointer(window->getWindow(), camera);
@@ -36,12 +40,8 @@ FeTestApp::FeTestApp(void)
 
 void FeTestApp::cycle(void)
 {
-    felog("fe_main(): checking input...");
-    input->checkInput(window, *camera);
-    FBO * fbo = fe_getFBO();
-    Shader * fboShader = fe_getShader(2);
-
     if (window->windowGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT, GLFW_PRESS)) {
+        FBO * fbo = fe_getFBO();
         double mouseX, mouseY;
         glfwGetCursorPos(window->getWindow(), &mouseX, &mouseY);
         uint modelID = fbo->getModelID((int)mouseX, (int)mouseY);
@@ -49,28 +49,10 @@ void FeTestApp::cycle(void)
         std::cout << "ID in big-endian: " << modelID << std::endl;
     }
 
-    felog("fe_main(): updating camera...");
-    camera->updateMatrix();
-    fbo->bind();
-    glClearColor(
-        0.f,0.f,0.f,1.f
-    );
-    glClear
-    (
-        GL_COLOR_BUFFER_BIT
-        | GL_DEPTH_BUFFER_BIT
-        | GL_STENCIL_BUFFER_BIT
-    );
-    fboShader->bind();
-    fbo->setModelID(*fboShader, 2u);
-    Model * model = getModel(0);
-    model->draw(*fboShader, *camera);
-    fbo->unbind();
-    shader->bind();
-
+    // TODO: add drawOutline func
     /*glStencilFunc(GL_ALWAYS, 1, 0xff);
     glStencilMask(0xff);*/
-    model->draw(*shader, *camera);/*
+/*
 
     glStencilFunc(GL_NOTEQUAL, 1, 0xff);
     glStencilMask(0x00);
@@ -82,8 +64,6 @@ void FeTestApp::cycle(void)
     glStencilMask(0xff);
     glStencilFunc(GL_ALWAYS, 0, 0xff);
     glEnable(GL_DEPTH_TEST);*/
-
-    //model->changePos();
 
     if (camera->showImGui) {
         ImGui_ImplOpenGL3_NewFrame();
@@ -98,15 +78,10 @@ void FeTestApp::cycle(void)
 
 
         ImGui::Render();
-
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
 
     txtRenderer->RenderText(*txtShader, "Sample text", 25.0f, 25.0f, .5f, glm::vec3(0.5, 0.8f, 0.2f));
-}
-
-void FeTestApp::winresize_callback(GLFWwindow * window, int width, int height)
-{
 }
 
 void FeTestApp::free(void)
@@ -114,5 +89,4 @@ void FeTestApp::free(void)
     delete txtShader;
     delete txtRenderer;
     delete camera;
-    deleteModels();
 }

@@ -1,6 +1,7 @@
 #ifndef FE_SETTINGS_H
 #define FE_SETTINGS_H
 
+#include "VAO.h"
 #include <iostream>
 
 /* settings for fe-kernel */
@@ -16,8 +17,24 @@
 #define FE_ENABLE_FBOPICKING
 #define FE_GLFW_NO_SETCURSOR /* if glfwSetCursorPos() didn't work */
 #define FE_ASPECT_RATIO
+#define FE_ENABLE_CULLFACE
+
+
+
+#ifdef FE_ENABLE_CULLFACE
+
+/* you can redact face culling flags here */
+#define FE_CULLFACE_FLAGS \
+    glEnable(GL_CULL_FACE); \
+    glCullFace(GL_FRONT); \
+    glFrontFace(GL_CCW);
+#else
+#define FE_CULLFACE_FLAGS
+#endif
+
 #define FE_GLENABLE \
     glEnable(GL_DEPTH_TEST); \
+    FE_CULLFACE_FLAGS \
     glEnable(GL_DEBUG_OUTPUT); \
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); \
     glEnable(GL_BLEND); \
@@ -40,10 +57,19 @@
 #define FE_FREE_SCRIPTS \
     fe_test->free();
 
-#define FE_WINRESIZE_SCRIPTS \
-    fe_test->winresize_callback(window, width, height);
+#define FE_WINRESIZE_SCRIPTS
+//    fe_test->winresize_callback(window, width, height);
 
 //#define FE_ENABLE_STENCIL
+
+const int FE_CLEARFLAGS =
+GL_COLOR_BUFFER_BIT
+| GL_DEPTH_BUFFER_BIT
+#ifdef FE_ENABLE_STENCIL
+| GL_STEGL_STENCIL_BUFFER_BIT
+#endif
+;
+
 
 #define RED "\033[31m"
 #define RESET "\033[0m"

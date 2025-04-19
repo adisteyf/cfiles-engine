@@ -10,6 +10,7 @@
 /* fe-headers */
 #include "FBO.h"
 #include "fe-kernel.h"
+#include "fe-logic.h"
 #include "fe-settings.h"
 #include "window.h"
 #include "camera.h"
@@ -40,6 +41,7 @@ Shader * shader        = nullptr;
 Shader * outlineShader = nullptr;
 Window * window        = nullptr;
 Input  * input         = nullptr;
+Camera * mainCamera    = nullptr;
 FE_SCRIPTS
 
 Shader* fe_getShader(int type)
@@ -58,6 +60,15 @@ Shader* fe_getShader(int type)
 FBO * fe_getFBO(void) {
     return fboPicking;
 }
+
+void drawFboPicking() {
+    fboPicking->bind();
+    window->clearBlack();
+    pickingShader->bind();
+    fboPicking->setModelID(*pickingShader, 2u);
+    drawModels(pickingShader);
+    fboPicking->unbind();
+}
 #endif
 
 Window* fe_getWindow(void) {
@@ -66,6 +77,10 @@ Window* fe_getWindow(void) {
 
 Input* fe_getInput(void) {
     return input;
+}
+
+Camera* fe_getMainCamera(void) {
+    return mainCamera;
 }
 
 void fe_preWorkFuncs(void)
@@ -143,6 +158,14 @@ void fe_main()
         window->pollEvents();
         felog("fe_main(): clearing window...");
         window->clear();
+        felog("fe_main(): checking input...");
+        input->checkInput(window, *mainCamera);
+
+        felog("fe_main(): updating camera...");
+        mainCamera->updateMatrix();
+        drawFboPicking();
+        shader->bind();
+        drawModels(shader);
 
         FE_CYCLE_SCRIPTS
 
@@ -163,5 +186,6 @@ void fe_main()
     delete fboPicking;
     delete pickingShader;
 #   endif
+    deleteModels();
 }
 
