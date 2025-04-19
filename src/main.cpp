@@ -41,6 +41,7 @@ Shader * shader        = nullptr;
 Shader * outlineShader = nullptr;
 Window * window        = nullptr;
 Input  * input         = nullptr;
+Camera * mainCamera    = nullptr;
 FE_SCRIPTS
 
 Shader* fe_getShader(int type)
@@ -67,6 +68,10 @@ Window* fe_getWindow(void) {
 
 Input* fe_getInput(void) {
     return input;
+}
+
+Camera* fe_getMainCamera(void) {
+    return mainCamera;
 }
 
 void fe_preWorkFuncs(void)

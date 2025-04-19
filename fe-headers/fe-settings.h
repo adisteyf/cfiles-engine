@@ -41,7 +41,7 @@
 #define FE_FREE_SCRIPTS \
     fe_test->free();
 
-#define FE_WINRESIZE_SCRIPTS// \
+#define FE_WINRESIZE_SCRIPTS
 //    fe_test->winresize_callback(window, width, height);
 
 //#define FE_ENABLE_STENCIL

@@ -1,4 +1,5 @@
 #include "model.h"
+#include "main.h"
 #include <ostream>
 
 Model::Model(const char * file)
@@ -26,9 +27,16 @@ void Model::changePos(void)
 
 void Model::draw(Shader &shader, Camera &camera)
 {
-    for (unsigned int i=0; i<meshes.size(); i++)
-    {
+    for (unsigned int i=0; i<meshes.size(); i++) {
         meshes[i].Mesh::draw(shader, camera, matricesMeshes[i]);
+    }
+}
+
+void Model::draw(Shader &shader)
+{
+    Camera * camera = fe_getMainCamera();
+    for (unsigned int i=0; i<meshes.size(); i++) {
+        meshes[i].Mesh::draw(shader, *camera, matricesMeshes[i]);
     }
 }
 
@@ -367,14 +375,21 @@ std::vector<glm::vec4> Model::groupFloatsVec4(std::vector<float> floatVec)
 	return vectors;
 }
 
-bool forDebug = false;
-void testmdl () { puts("double deleting"); }
+Shader * modelDrawShader = nullptr;
 extern "C" {
   void deleteModelC(void * ptr) {
-    if (forDebug) { testmdl(); }
-    forDebug = true;
     Model * tmp = (Model *) ptr;
     printf("deleting model: %p\n", tmp);
     delete tmp;
+  }
+
+  void drawModelC(void * ptr) {
+    if (!modelDrawShader) {
+        printf("MODEL: drawModel: modelDrawShader == NULL\n");
+        return;
+    }
+
+    Model * tmp = (Model *)ptr;
+    tmp->draw(*modelDrawShader);
   }
 }

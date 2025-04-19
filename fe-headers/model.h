@@ -21,6 +21,7 @@ class Model {
 public:
     Model(const char * name);
     void draw(Shader &shader, Camera &camera);
+    void draw(Shader &shader);
     std::string get_file_contents(const char* filename);
     void changePos(void);
     std::vector<Mesh> meshes;

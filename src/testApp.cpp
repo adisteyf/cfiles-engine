@@ -17,6 +17,9 @@
 #include <cmath>
 #include <ostream>
 
+extern Camera * mainCamera;
+extern Shader * modelDrawShader;
+
 FeTestApp::FeTestApp(void)
     : input(fe_getInput()), 
       shader(fe_getShader(0)), 
@@ -26,6 +29,7 @@ FeTestApp::FeTestApp(void)
       window(fe_getWindow())
 {
     camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f), 45.0f, 0.1f, 100.0f);
+    mainCamera = camera;
     Model * model = new Model("assets/models/bunny/scene.gltf");
 
     glfwSetWindowUserPointer(window->getWindow(), camera);
@@ -55,14 +59,15 @@ void FeTestApp::cycle(void)
     window->clearBlack();
     fboShader->bind();
     fbo->setModelID(*fboShader, 2u);
-    Model * model = getModel(0);
-    model->draw(*fboShader, *camera);
+    modelDrawShader = fboShader;
+    drawModels();
     fbo->unbind();
     shader->bind();
 
     /*glStencilFunc(GL_ALWAYS, 1, 0xff);
     glStencilMask(0xff);*/
-    model->draw(*shader, *camera);/*
+    modelDrawShader = shader;
+    drawModels();/*
 
     glStencilFunc(GL_NOTEQUAL, 1, 0xff);
     glStencilMask(0x00);
