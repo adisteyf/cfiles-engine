@@ -19,6 +19,9 @@
 #define FE_ASPECT_RATIO
 #define FE_GLENABLE \
     glEnable(GL_DEPTH_TEST); \
+    glEnable(GL_CULL_FACE); \
+    glCullFace(GL_FRONT); \
+    glFrontFace(GL_CCW); \
     glEnable(GL_DEBUG_OUTPUT); \
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); \
     glEnable(GL_BLEND); \
