@@ -38,12 +38,23 @@ FeTestApp::FeTestApp(void)
     addModel(model);
 }
 
+void drawFboPicking() {
+    FBO * fbo = fe_getFBO();
+    Shader * fboShader = fe_getShader(2);
+    Window * window = fe_getWindow();
+    fbo->bind();
+    window->clearBlack();
+    fboShader->bind();
+    fbo->setModelID(*fboShader, 2u);
+    drawModels(fboShader);
+    fbo->unbind();
+}
+
 void FeTestApp::cycle(void)
 {
     felog("fe_main(): checking input...");
     input->checkInput(window, *camera);
     FBO * fbo = fe_getFBO();
-    Shader * fboShader = fe_getShader(2);
 
     if (window->windowGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT, GLFW_PRESS)) {
         double mouseX, mouseY;
@@ -55,12 +66,7 @@ void FeTestApp::cycle(void)
 
     felog("fe_main(): updating camera...");
     camera->updateMatrix();
-    fbo->bind();
-    window->clearBlack();
-    fboShader->bind();
-    fbo->setModelID(*fboShader, 2u);
-    drawModels(fboShader);
-    fbo->unbind();
+    drawFboPicking();
     shader->bind();
 
     /*glStencilFunc(GL_ALWAYS, 1, 0xff);
