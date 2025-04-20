@@ -60,6 +60,15 @@ Shader* fe_getShader(int type)
 FBO * fe_getFBO(void) {
     return fboPicking;
 }
+
+void drawFboPicking() {
+    fboPicking->bind();
+    window->clearBlack();
+    pickingShader->bind();
+    fboPicking->setModelID(*pickingShader, 2u);
+    drawModels(pickingShader);
+    fboPicking->unbind();
+}
 #endif
 
 Window* fe_getWindow(void) {
@@ -149,6 +158,13 @@ void fe_main()
         window->pollEvents();
         felog("fe_main(): clearing window...");
         window->clear();
+        felog("fe_main(): checking input...");
+        input->checkInput(window, *mainCamera);
+
+        mainCamera->updateMatrix();
+        drawFboPicking();
+        shader->bind();
+        drawModels(shader);
 
         FE_CYCLE_SCRIPTS
 
