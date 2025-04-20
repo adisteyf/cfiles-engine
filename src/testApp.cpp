@@ -49,6 +49,17 @@ void FeTestApp::cycle(void)
         std::cout << "ID in big-endian: " << modelID << std::endl;
     }
 
+    if (window->windowGetKey(GLFW_KEY_F, GLFW_PRESS)) {
+        Model * model = getModel(0);
+        model->changePos(glm::vec3(1.0f, 1.f, 1.f));
+    }
+
+    if (window->windowGetKey(GLFW_KEY_G, GLFW_PRESS)) {
+        Model * model = getModel(0);
+        model->changePos(glm::vec3(0.f,0.f,0.f));
+    }
+
+
     // TODO: add drawOutline func
     /*glStencilFunc(GL_ALWAYS, 1, 0xff);
     glStencilMask(0xff);*/
