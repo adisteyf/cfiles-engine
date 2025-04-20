@@ -40,9 +40,8 @@ FeTestApp::FeTestApp(void)
 
 void FeTestApp::cycle(void)
 {
-    FBO * fbo = fe_getFBO();
-
     if (window->windowGetMouseButton(GLFW_MOUSE_BUTTON_RIGHT, GLFW_PRESS)) {
+        FBO * fbo = fe_getFBO();
         double mouseX, mouseY;
         glfwGetCursorPos(window->getWindow(), &mouseX, &mouseY);
         uint modelID = fbo->getModelID((int)mouseX, (int)mouseY);
@@ -50,8 +49,7 @@ void FeTestApp::cycle(void)
         std::cout << "ID in big-endian: " << modelID << std::endl;
     }
 
-    felog("fe_main(): updating camera...");
-
+    // TODO: add drawOutline func
     /*glStencilFunc(GL_ALWAYS, 1, 0xff);
     glStencilMask(0xff);*/
 /*
@@ -80,7 +78,6 @@ void FeTestApp::cycle(void)
 
 
         ImGui::Render();
-
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
 

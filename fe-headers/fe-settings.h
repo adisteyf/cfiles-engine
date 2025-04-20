@@ -17,11 +17,24 @@
 #define FE_ENABLE_FBOPICKING
 #define FE_GLFW_NO_SETCURSOR /* if glfwSetCursorPos() didn't work */
 #define FE_ASPECT_RATIO
-#define FE_GLENABLE \
-    glEnable(GL_DEPTH_TEST); \
+#define FE_ENABLE_CULLFACE
+
+
+
+#ifdef FE_ENABLE_CULLFACE
+
+/* you can redact face culling flags here */
+#define FE_CULLFACE_FLAGS \
     glEnable(GL_CULL_FACE); \
     glCullFace(GL_FRONT); \
-    glFrontFace(GL_CCW); \
+    glFrontFace(GL_CCW);
+#else
+#define FE_CULLFACE_FLAGS
+#endif
+
+#define FE_GLENABLE \
+    glEnable(GL_DEPTH_TEST); \
+    FE_CULLFACE_FLAGS \
     glEnable(GL_DEBUG_OUTPUT); \
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); \
     glEnable(GL_BLEND); \

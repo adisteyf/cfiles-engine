@@ -161,6 +161,7 @@ void fe_main()
         felog("fe_main(): checking input...");
         input->checkInput(window, *mainCamera);
 
+        felog("fe_main(): updating camera...");
         mainCamera->updateMatrix();
         drawFboPicking();
         shader->bind();
