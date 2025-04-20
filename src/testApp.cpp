@@ -59,15 +59,13 @@ void FeTestApp::cycle(void)
     window->clearBlack();
     fboShader->bind();
     fbo->setModelID(*fboShader, 2u);
-    modelDrawShader = fboShader;
-    drawModels();
+    drawModels(fboShader);
     fbo->unbind();
     shader->bind();
 
     /*glStencilFunc(GL_ALWAYS, 1, 0xff);
     glStencilMask(0xff);*/
-    modelDrawShader = shader;
-    drawModels();/*
+    drawModels(shader);/*
 
     glStencilFunc(GL_NOTEQUAL, 1, 0xff);
     glStencilMask(0x00);

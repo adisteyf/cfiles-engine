@@ -375,7 +375,6 @@ std::vector<glm::vec4> Model::groupFloatsVec4(std::vector<float> floatVec)
 	return vectors;
 }
 
-Shader * modelDrawShader = nullptr;
 extern "C" {
   void deleteModelC(void * ptr) {
     Model * tmp = (Model *) ptr;
@@ -383,13 +382,9 @@ extern "C" {
     delete tmp;
   }
 
-  void drawModelC(void * ptr) {
-    if (!modelDrawShader) {
-        printf("MODEL: drawModel: modelDrawShader == NULL\n");
-        return;
-    }
-
-    Model * tmp = (Model *)ptr;
-    tmp->draw(*modelDrawShader);
+  void drawModelC(void * ptr, void * shptr) {
+    Model  * mdl = (Model *)ptr;
+    Shader * sdr = (Shader *)shptr;
+    mdl->draw(*sdr);
   }
 }
