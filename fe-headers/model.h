@@ -2,6 +2,7 @@
 #define MODEL_H
 
 #include "mesh.h"
+#include <glm/fwd.hpp>
 #include <json/json.h>
 #include <string>
 #include "VBO.h"
@@ -23,7 +24,7 @@ public:
     void draw(Shader &shader, Camera &camera);
     void draw(Shader &shader);
     std::string get_file_contents(const char* filename);
-    void changePos(void);
+    void changePos(glm::vec3 newPos);
     std::vector<Mesh> meshes;
     std::vector<glm::vec3> translationMeshes;
 private:
@@ -31,6 +32,7 @@ private:
     std::vector<unsigned char> data;
     json JSON;
 
+    glm::vec3 position = glm::vec3(0.f,0.f,0.f);
     std::vector<glm::quat> rotationsMeshes;
     std::vector<glm::vec3> scalesMeshes;
     std::vector<glm::mat4> matricesMeshes;

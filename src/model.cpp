@@ -1,5 +1,7 @@
 #include "model.h"
+#include "camera.h"
 #include "main.h"
+#include <glm/fwd.hpp>
 #include <ostream>
 
 Model::Model(const char * file)
@@ -13,15 +15,16 @@ Model::Model(const char * file)
     traverseNode(0);
 }
 
-void Model::changePos(void)
+void Model::changePos(glm::vec3 newPos)
 {
-    /*for (unsigned int i=0; i<meshes.size(); ++i) {
-        for (unsigned int j=0; j<meshes[i].vertices.size(); ++j) {
-            meshes[i].vertices[j].position.x += 0.01f;
-        }
+    for (unsigned int i=0; i<matricesMeshes.size(); ++i) {
+        matricesMeshes[i] = glm::translate(matricesMeshes[i], position-newPos);
+    }
+
+    for (unsigned int i=0; i<meshes.size(); ++i) {
         meshes[i].updateVBO();
-    }*/
-    std::cout << "meshesinmdl: " << meshes.size() << std::endl;
+    }
+    position = newPos;
 } // TODO: доделать
 
 

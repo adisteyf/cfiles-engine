@@ -30,12 +30,14 @@ FeTestApp::FeTestApp(void)
 {
     camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f), 45.0f, 0.1f, 100.0f);
     mainCamera = camera;
-    Model * model = new Model("assets/models/bunny/scene.gltf");
+    Model * model  = new Model("assets/models/bunny/scene.gltf");
+    Model * model1 = new Model("assets/models/sword/scene.gltf");
 
     glfwSetWindowUserPointer(window->getWindow(), camera);
     setupImGui(window->getWindow());
 
     addModel(model);
+    addModel(model1);
 }
 
 void FeTestApp::cycle(void)
@@ -48,6 +50,17 @@ void FeTestApp::cycle(void)
 
         std::cout << "ID in big-endian: " << modelID << std::endl;
     }
+
+    if (window->windowGetKey(GLFW_KEY_F, GLFW_PRESS)) {
+        Model * model = getModel(0);
+        model->changePos(glm::vec3(1.0f, 1.f, 1.f));
+    }
+
+    if (window->windowGetKey(GLFW_KEY_G, GLFW_PRESS)) {
+        Model * model = getModel(0);
+        model->changePos(glm::vec3(0.f,0.f,0.f));
+    }
+
 
     // TODO: add drawOutline func
     /*glStencilFunc(GL_ALWAYS, 1, 0xff);
