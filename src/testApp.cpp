@@ -30,13 +30,13 @@ FeTestApp::FeTestApp(void)
 {
     camera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, glm::vec3(-2.f, 8.f, 4.f), 45.0f, 0.1f, 100.0f);
     mainCamera = camera;
-    Model * model  = new Model("assets/models/bunny/scene.gltf");
+    //Model * model  = new Model("assets/models/vec3arr/scene.gltf");
     Model * model1 = new Model("assets/models/sword/scene.gltf");
 
     glfwSetWindowUserPointer(window->getWindow(), camera);
     setupImGui(window->getWindow());
 
-    addModel(model);
+    //addModel(model);
     addModel(model1);
 }
 

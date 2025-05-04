@@ -1,8 +1,12 @@
 #include "model.h"
 #include "camera.h"
+#include "fe-kernel.h"
 #include "main.h"
+#include <cstdio>
 #include <glm/fwd.hpp>
 #include <ostream>
+#include <string>
+#include <vector>
 
 Model::Model(const char * file)
 {
@@ -259,6 +263,7 @@ std::vector<GLuint> Model::getIndices(json accessor)
 std::vector<Texture> Model::getTextures()
 {
     std::vector<Texture> textures;
+    if (!JSON.contains("images")) { return textures; }
     std::string fileStr = std::string(file);
     std::string fileDir = fileStr.substr(0, fileStr.find_last_of('/')+1);
 

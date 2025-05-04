@@ -23,7 +23,7 @@ void main()
    Normal = aNormal;
    
    ourColor = aColor;
-   ourTexCoord = mat2(0.0, -1.0, 1.0, 0.0) * aTexCoord;
+   ourTexCoord = /*mat2(1.0, 0.0, 0.0, -1.0) */ aTexCoord;
 
    gl_Position = camMatrix * vec4(FragPos, 1.0);
 }
