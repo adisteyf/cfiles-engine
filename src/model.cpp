@@ -16,7 +16,9 @@ Model::Model(const char * file)
     Model::file = file;
     data = getData();
 
-    traverseNode(0);
+    for (uint i=0; i<JSON["scenes"][0]["nodes"].size(); ++i) {
+        traverseNode(JSON["scenes"][0]["nodes"][i]);
+    }
 }
 
 void Model::changePos(glm::vec3 newPos)
@@ -90,8 +92,7 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
     json node = JSON["nodes"][nextNode];
 
     glm::vec3 translation = glm::vec3(0.0f, 0.0f, 0.0f);
-    if (node.find("translation") != node.end())
-    {
+    if (node.find("translation") != node.end()) {
         float transValues[3];
         for (unsigned int i=0; i<node["translation"].size(); i++)
             transValues[i] = node["translation"][i];
@@ -99,8 +100,7 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
     }
 
     glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-    if (node.find("rotation") != node.end())
-    {
+    if (node.find("rotation") != node.end()) {
         float rotValues[4] =
         {
             node["rotation"][3],
@@ -140,8 +140,7 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 
     glm::mat4 matNextNode = matrix * matNode * trans * rot * sca;
 
-    if (node.find("mesh") != node.end())
-    {
+    if (node.find("mesh") != node.end()) {
         translationMeshes.push_back(translation);
         rotationsMeshes.push_back(rotation);
         scalesMeshes.push_back(scale);
@@ -150,10 +149,8 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
         loadMesh(node["mesh"]);
     }
 
-    if (node.find("children") != node.end())
-    {
-        for (unsigned int i=0; i<node["children"].size(); i++)
-        {
+    if (node.find("children") != node.end()) {
+        for (unsigned int i=0; i<node["children"].size(); i++) {
             traverseNode(node["children"][i], matNextNode);
         }
     }
