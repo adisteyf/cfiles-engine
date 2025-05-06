@@ -1,6 +1,7 @@
 #include "model.h"
 #include "camera.h"
 #include "fe-kernel.h"
+#include "fe-settings.h"
 #include "main.h"
 #include <cstdio>
 #include <glm/fwd.hpp>
@@ -15,6 +16,12 @@ Model::Model(const char * file)
 
     Model::file = file;
     data = getData();
+
+    felog("Model generator:");
+    felog(JSON["asset"]["generator"]);
+    if (JSON["asset"]["generator"] == "Khronos glTF Blender I/O v4.4.56") {
+        Model::reverseRot = true;
+    }
 
     for (uint i=0; i<JSON["scenes"][0]["nodes"].size(); ++i) {
         traverseNode(JSON["scenes"][0]["nodes"][i]);
@@ -101,15 +108,24 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 
     glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
     if (node.find("rotation") != node.end()) {
-        float rotValues[4] =
-        {
-            node["rotation"][3],
-            node["rotation"][0],
-            node["rotation"][1],
-            node["rotation"][2]
-        };
+      float rotValues[4];
+        if (!reverseRot) {
+            rotValues[0] = node["rotation"][3];
+            rotValues[1] = node["rotation"][0];
+            rotValues[2] = node["rotation"][1];
+            rotValues[3] = node["rotation"][2];
+        } else {
+            rotValues[0] = node["rotation"][0];
+            rotValues[1] = node["rotation"][1];
+            rotValues[2] = node["rotation"][2];
+            rotValues[3] = node["rotation"][3];
+        }
 
         rotation = glm::make_quat(rotValues);
+    }
+
+    if (reverseRot) {
+        rotation = -rotation;
     }
 
     glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
