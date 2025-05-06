@@ -4,7 +4,9 @@
 #include "fe-settings.h"
 #include "main.h"
 #include <cstdio>
+#include <glm/ext/quaternion_common.hpp>
 #include <glm/fwd.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -124,10 +126,6 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
         rotation = glm::make_quat(rotValues);
     }
 
-    if (reverseRot) {
-        rotation = -rotation;
-    }
-
     glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
     if (node.find("scale") != node.end())
     {
@@ -154,7 +152,12 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
     rot = glm::mat4_cast(rotation);
     sca = glm::scale(sca, scale);
 
-    glm::mat4 matNextNode = matrix * matNode * trans * rot * sca;
+    glm::mat4 matNextNode;
+    if (!reverseRot) {
+        matNextNode = matrix * matNode * trans * rot * sca;
+    } else {
+        matNextNode = matrix * matNode * trans * -rot * sca;
+    }
 
     if (node.find("mesh") != node.end()) {
         translationMeshes.push_back(translation);
