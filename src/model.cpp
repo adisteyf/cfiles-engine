@@ -1,8 +1,15 @@
 #include "model.h"
 #include "camera.h"
+#include "fe-kernel.h"
+#include "fe-settings.h"
 #include "main.h"
+#include <cstdio>
+#include <glm/ext/quaternion_common.hpp>
 #include <glm/fwd.hpp>
+#include <glm/gtc/quaternion.hpp>
 #include <ostream>
+#include <string>
+#include <vector>
 
 Model::Model(const char * file)
 {
@@ -12,7 +19,15 @@ Model::Model(const char * file)
     Model::file = file;
     data = getData();
 
-    traverseNode(0);
+    felog("Model generator:");
+    felog(JSON["asset"]["generator"]);
+    if (JSON["asset"]["generator"] == "Khronos glTF Blender I/O v4.4.56") {
+        Model::reverseRot = true;
+    }
+
+    for (uint i=0; i<JSON["scenes"][0]["nodes"].size(); ++i) {
+        traverseNode(JSON["scenes"][0]["nodes"][i]);
+    }
 }
 
 void Model::changePos(glm::vec3 newPos)
@@ -86,8 +101,7 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
     json node = JSON["nodes"][nextNode];
 
     glm::vec3 translation = glm::vec3(0.0f, 0.0f, 0.0f);
-    if (node.find("translation") != node.end())
-    {
+    if (node.find("translation") != node.end()) {
         float transValues[3];
         for (unsigned int i=0; i<node["translation"].size(); i++)
             transValues[i] = node["translation"][i];
@@ -95,15 +109,19 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
     }
 
     glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-    if (node.find("rotation") != node.end())
-    {
-        float rotValues[4] =
-        {
-            node["rotation"][3],
-            node["rotation"][0],
-            node["rotation"][1],
-            node["rotation"][2]
-        };
+    if (node.find("rotation") != node.end()) {
+      float rotValues[4];
+        if (!reverseRot) {
+            rotValues[0] = node["rotation"][3];
+            rotValues[1] = node["rotation"][0];
+            rotValues[2] = node["rotation"][1];
+            rotValues[3] = node["rotation"][2];
+        } else {
+            rotValues[0] = node["rotation"][0];
+            rotValues[1] = node["rotation"][1];
+            rotValues[2] = node["rotation"][2];
+            rotValues[3] = node["rotation"][3];
+        }
 
         rotation = glm::make_quat(rotValues);
     }
@@ -134,10 +152,14 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
     rot = glm::mat4_cast(rotation);
     sca = glm::scale(sca, scale);
 
-    glm::mat4 matNextNode = matrix * matNode * trans * rot * sca;
+    glm::mat4 matNextNode;
+    if (!reverseRot) {
+        matNextNode = matrix * matNode * trans * rot * sca;
+    } else {
+        matNextNode = matrix * matNode * trans * -rot * sca;
+    }
 
-    if (node.find("mesh") != node.end())
-    {
+    if (node.find("mesh") != node.end()) {
         translationMeshes.push_back(translation);
         rotationsMeshes.push_back(rotation);
         scalesMeshes.push_back(scale);
@@ -146,10 +168,8 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
         loadMesh(node["mesh"]);
     }
 
-    if (node.find("children") != node.end())
-    {
-        for (unsigned int i=0; i<node["children"].size(); i++)
-        {
+    if (node.find("children") != node.end()) {
+        for (unsigned int i=0; i<node["children"].size(); i++) {
             traverseNode(node["children"][i], matNextNode);
         }
     }
@@ -259,6 +279,7 @@ std::vector<GLuint> Model::getIndices(json accessor)
 std::vector<Texture> Model::getTextures()
 {
     std::vector<Texture> textures;
+    if (!JSON.contains("images")) { return textures; }
     std::string fileStr = std::string(file);
     std::string fileDir = fileStr.substr(0, fileStr.find_last_of('/')+1);
 

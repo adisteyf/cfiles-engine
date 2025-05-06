@@ -21,9 +21,8 @@ void main()
 {
    FragPos = vec3(model * translation * -rotation * scale * vec4(aPos, 1.0));
    Normal = aNormal;
-   
    ourColor = aColor;
-   ourTexCoord = mat2(0.0, -1.0, 1.0, 0.0) * aTexCoord;
+   ourTexCoord = aTexCoord;
 
    gl_Position = camMatrix * vec4(FragPos, 1.0);
 }

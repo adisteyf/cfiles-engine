@@ -31,6 +31,7 @@ private:
     const char * file;
     std::vector<unsigned char> data;
     json JSON;
+    bool reverseRot = false;
 
     glm::vec3 position = glm::vec3(0.f,0.f,0.f);
     std::vector<glm::quat> rotationsMeshes;

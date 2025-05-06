@@ -2,8 +2,8 @@
 
 Texture::Texture(const char *path, const char* texType, GLuint slot) {
     type = texType ? texType : "diffuse";
+    stbi_set_flip_vertically_on_load(false);
 
-    stbi_set_flip_vertically_on_load(true);
     unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
     if (!data) {
         std::cerr << "Failed to load texture: " << path << std::endl;
@@ -14,12 +14,10 @@ Texture::Texture(const char *path, const char* texType, GLuint slot) {
     std::cout << "Width: " << width << ", Height: " << height << ", Channels: " << nrChannels << std::endl;
 
     Texture::loadTexture(data, texType, slot);
-    stbi_image_free(data);
 }
 
 void Texture::loadTexture(unsigned char *data, const char* texType, GLuint slot) {
     type = texType ? texType : "diffuse";
-    stbi_set_flip_vertically_on_load(true);
 
     glGenTextures(1, &id);
     glActiveTexture(GL_TEXTURE0 + slot);
@@ -35,12 +33,12 @@ void Texture::loadTexture(unsigned char *data, const char* texType, GLuint slot)
         }
 
         case 3: {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
             break;
         }
 
         case 1: {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
             break;
         }
 
@@ -52,6 +50,7 @@ void Texture::loadTexture(unsigned char *data, const char* texType, GLuint slot)
 
     glGenerateMipmap(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, 0);
+    stbi_image_free(data);
 }
 
 void Texture::texUnit(Shader& shader, const char *uniform, GLuint unit) {
