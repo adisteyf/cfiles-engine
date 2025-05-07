@@ -279,7 +279,14 @@ std::vector<GLuint> Model::getIndices(json accessor)
 std::vector<Texture> Model::getTextures()
 {
     std::vector<Texture> textures;
-    if (!JSON.contains("images")) { return textures; }
+    if (!JSON.contains("images")) {
+        Texture diffuse = Texture("assets/textures/deadtex.png", "diffuse", loadedTex.size());
+        textures.push_back(diffuse);
+        loadedTex.push_back(diffuse);
+        loadedTexName.push_back("assets/textures/deadtex.png");
+        return textures;
+    }
+
     std::string fileStr = std::string(file);
     std::string fileDir = fileStr.substr(0, fileStr.find_last_of('/')+1);
 
@@ -300,16 +307,12 @@ std::vector<Texture> Model::getTextures()
 
         if (!skip)
         {
-            if (texPath.find("baseColor") != std::string::npos)
-            {
+            if (texPath.find("baseColor") != std::string::npos) {
                 Texture diffuse = Texture((fileDir+texPath).c_str(), "diffuse", loadedTex.size());
                 textures.push_back(diffuse);
                 loadedTex.push_back(diffuse);
                 loadedTexName.push_back(texPath);
-            }
-
-            else if (texPath.find("metallicRoughness") != std::string::npos)
-            {
+            } else if (texPath.find("metallicRoughness") != std::string::npos) {
                 Texture specular = Texture((fileDir+texPath).c_str(), "specular", loadedTex.size());
                 textures.push_back(specular);
                 loadedTex.push_back(specular);
