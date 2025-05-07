@@ -21,8 +21,8 @@ Model::Model(const char * file)
 
     felog("Model generator:");
     felog(JSON["asset"]["generator"]);
-    if (JSON["asset"]["generator"] == "Khronos glTF Blender I/O v4.4.56") {
-        Model::reverseRot = true;
+    if (JSON["asset"]["generator"] != "Khronos glTF Blender I/O v4.4.56") {
+        Model::reverseRot = false;
     }
 
     for (uint i=0; i<JSON["scenes"][0]["nodes"].size(); ++i) {
@@ -93,7 +93,24 @@ void Model::loadMesh(unsigned int indMesh)
     std::vector<GLuint> indices = getIndices(JSON["accessors"][indAccInd]);
     std::vector<Texture> textures = getTextures();
 
-    meshes.push_back(Mesh(vertices, indices, textures));
+    int matInd = JSON["meshes"][indMesh]["primitives"][0]["material"];
+    auto pbrMetR = JSON["materials"][matInd]["pbrMetallicRoughness"];
+    if (pbrMetR.contains("baseColorFactor") && (textures.empty() || strcmp(textures[0].type, "diffuseerr")==0)) {
+        float color[4] = {
+            pbrMetR["baseColorFactor"][0],
+            pbrMetR["baseColorFactor"][1],
+            pbrMetR["baseColorFactor"][2],
+            pbrMetR["baseColorFactor"][3],
+        };
+
+        textures[0].type = "diffuse";
+        glm::vec4 colorVec = glm::make_vec4(color);
+        printf("COLORS: %f %f %f %f\n", colorVec.r, colorVec.g, colorVec.b, colorVec.a);
+        meshes.push_back(Mesh(vertices, indices, textures, colorVec));
+        return;
+    }
+
+    meshes.push_back(Mesh(vertices, indices, textures, glm::vec4(0.f,0.f,0.f,0.f)));
 }
 
 void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
@@ -154,9 +171,9 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 
     glm::mat4 matNextNode;
     if (!reverseRot) {
-        matNextNode = matrix * matNode * trans * rot * sca;
-    } else {
         matNextNode = matrix * matNode * trans * -rot * sca;
+    } else {
+        matNextNode = matrix * matNode * trans * rot * sca;
     }
 
     if (node.find("mesh") != node.end()) {
@@ -279,7 +296,14 @@ std::vector<GLuint> Model::getIndices(json accessor)
 std::vector<Texture> Model::getTextures()
 {
     std::vector<Texture> textures;
-    if (!JSON.contains("images")) { return textures; }
+    if (!JSON.contains("images")) {
+        Texture diffuse = Texture("assets/textures/deadtex.png", "diffuseerr", loadedTex.size());
+        textures.push_back(diffuse);
+        loadedTex.push_back(diffuse);
+        loadedTexName.push_back("assets/textures/deadtex.png");
+        return textures;
+    }
+
     std::string fileStr = std::string(file);
     std::string fileDir = fileStr.substr(0, fileStr.find_last_of('/')+1);
 
@@ -300,16 +324,12 @@ std::vector<Texture> Model::getTextures()
 
         if (!skip)
         {
-            if (texPath.find("baseColor") != std::string::npos)
-            {
+            if (texPath.find("baseColor") != std::string::npos) {
                 Texture diffuse = Texture((fileDir+texPath).c_str(), "diffuse", loadedTex.size());
                 textures.push_back(diffuse);
                 loadedTex.push_back(diffuse);
                 loadedTexName.push_back(texPath);
-            }
-
-            else if (texPath.find("metallicRoughness") != std::string::npos)
-            {
+            } else if (texPath.find("metallicRoughness") != std::string::npos) {
                 Texture specular = Texture((fileDir+texPath).c_str(), "specular", loadedTex.size());
                 textures.push_back(specular);
                 loadedTex.push_back(specular);
