@@ -13,10 +13,11 @@ public:
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
     std::vector<Texture> textures;
+    glm::vec4 objColor = glm::vec4(0.f,0.f,0.f,0.f);
 
     VAO vao;
 
-    Mesh(std::vector<Vertex> &vertices, std::vector<GLuint> &indices, std::vector<Texture> &textures);
+    Mesh(std::vector<Vertex> &vertices, std::vector<GLuint> &indices, std::vector<Texture> &textures, glm::vec4 objc);
     ~Mesh();
 
     void draw

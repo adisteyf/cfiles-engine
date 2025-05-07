@@ -39,6 +39,7 @@ out vec4 FragColor;
 
 uniform sampler2D diffuse0;
 uniform sampler2D specular0;
+uniform vec4 objColor;
 uniform vec4 lightColor;
 uniform vec3 lightPos;
 uniform vec3 camPos;
@@ -84,8 +85,15 @@ vec4 directionalLight() {
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     float specular = specularStrength * spec;
 
-    vec4 texColor = texture(diffuse0, ourTexCoord);
-    vec4 texColor2 = texture(specular0, ourTexCoord);
+    vec4 texColor;
+    vec4 texColor2;
+    if (objColor.a == 0.0f) {
+        texColor = texture(diffuse0, ourTexCoord);
+        texColor2 = texture(specular0, ourTexCoord);
+    } else {
+        texColor = objColor;
+        texColor2 = objColor;
+    }
     
     vec4 result = (texColor * (diff + ambient) + texColor2.r * specular) * lightColor;
 

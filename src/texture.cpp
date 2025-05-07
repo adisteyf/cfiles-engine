@@ -14,6 +14,7 @@ Texture::Texture(const char *path, const char* texType, GLuint slot) {
     std::cout << "Width: " << width << ", Height: " << height << ", Channels: " << nrChannels << std::endl;
 
     Texture::loadTexture(data, texType, slot);
+    stbi_image_free(data);
 }
 
 void Texture::loadTexture(unsigned char *data, const char* texType, GLuint slot) {
@@ -50,7 +51,6 @@ void Texture::loadTexture(unsigned char *data, const char* texType, GLuint slot)
 
     glGenerateMipmap(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, 0);
-    stbi_image_free(data);
 }
 
 void Texture::texUnit(Shader& shader, const char *uniform, GLuint unit) {

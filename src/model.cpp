@@ -93,7 +93,24 @@ void Model::loadMesh(unsigned int indMesh)
     std::vector<GLuint> indices = getIndices(JSON["accessors"][indAccInd]);
     std::vector<Texture> textures = getTextures();
 
-    meshes.push_back(Mesh(vertices, indices, textures));
+    int matInd = JSON["meshes"][indMesh]["primitives"][0]["material"];
+    auto pbrMetR = JSON["materials"][matInd]["pbrMetallicRoughness"];
+    if (pbrMetR.contains("baseColorFactor") && (textures.empty() || strcmp(textures[0].type, "diffuseerr")==0)) {
+        float color[4] = {
+            pbrMetR["baseColorFactor"][0],
+            pbrMetR["baseColorFactor"][1],
+            pbrMetR["baseColorFactor"][2],
+            pbrMetR["baseColorFactor"][3],
+        };
+
+        textures[0].type = "diffuse";
+        glm::vec4 colorVec = glm::make_vec4(color);
+        printf("COLORS: %f %f %f %f\n", colorVec.r, colorVec.g, colorVec.b, colorVec.a);
+        meshes.push_back(Mesh(vertices, indices, textures, colorVec));
+        return;
+    }
+
+    meshes.push_back(Mesh(vertices, indices, textures, glm::vec4(0.f,0.f,0.f,0.f)));
 }
 
 void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
@@ -280,7 +297,7 @@ std::vector<Texture> Model::getTextures()
 {
     std::vector<Texture> textures;
     if (!JSON.contains("images")) {
-        Texture diffuse = Texture("assets/textures/deadtex.png", "diffuse", loadedTex.size());
+        Texture diffuse = Texture("assets/textures/deadtex.png", "diffuseerr", loadedTex.size());
         textures.push_back(diffuse);
         loadedTex.push_back(diffuse);
         loadedTexName.push_back("assets/textures/deadtex.png");

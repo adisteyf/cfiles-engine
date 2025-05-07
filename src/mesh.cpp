@@ -1,11 +1,13 @@
 #include "mesh.h"
+#include "fe-kernel.h"
 #include <glm/gtc/type_ptr.hpp>
 
-Mesh::Mesh(std::vector <Vertex>& vertices, std::vector <GLuint>& indices, std::vector <Texture>& textures)
+Mesh::Mesh(std::vector <Vertex>& vertices, std::vector <GLuint>& indices, std::vector <Texture>& textures, glm::vec4 objc)
 {
     Mesh::vertices = vertices;
     Mesh::indices = indices;
     Mesh::textures = textures;
+    Mesh::objColor = objc;
 
     vao.bind();
     VBO vbo(vertices);
@@ -52,19 +54,17 @@ void Mesh::draw
     unsigned int numDiffuse = 0;
     unsigned int numSpecular = 0;
 
-    for (unsigned int i = 0; i < textures.size(); i++)
-    {
+    for (unsigned int i = 0; i < textures.size(); i++) {
         std::string num;
         std::string type = textures[i].type;
-        if (type == "diffuse")
-        {
+        if (type == "diffuse") {
             num = std::to_string(numDiffuse++);
-        }
-        else if (type == "specular")
-        {
+        } else if (type == "specular") {
             num = std::to_string(numSpecular++);
         }
+
         textures[i].texUnit(shader, (type + num).c_str(), i);
+        shader.setUniform("objColor", objColor);
         textures[i].bind();
     }
 
