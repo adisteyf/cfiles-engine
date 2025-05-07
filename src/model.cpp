@@ -21,8 +21,8 @@ Model::Model(const char * file)
 
     felog("Model generator:");
     felog(JSON["asset"]["generator"]);
-    if (JSON["asset"]["generator"] == "Khronos glTF Blender I/O v4.4.56") {
-        Model::reverseRot = true;
+    if (JSON["asset"]["generator"] != "Khronos glTF Blender I/O v4.4.56") {
+        Model::reverseRot = false;
     }
 
     for (uint i=0; i<JSON["scenes"][0]["nodes"].size(); ++i) {
@@ -154,9 +154,9 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 
     glm::mat4 matNextNode;
     if (!reverseRot) {
-        matNextNode = matrix * matNode * trans * rot * sca;
-    } else {
         matNextNode = matrix * matNode * trans * -rot * sca;
+    } else {
+        matNextNode = matrix * matNode * trans * rot * sca;
     }
 
     if (node.find("mesh") != node.end()) {
