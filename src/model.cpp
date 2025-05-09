@@ -42,11 +42,10 @@ void Model::changePos(glm::vec3 newPos)
     position = newPos;
 } // TODO: доделать
 
-
 void Model::draw(Shader &shader, Camera &camera)
 {
     for (unsigned int i=0; i<meshes.size(); i++) {
-        meshes[i].Mesh::draw(shader, camera, matricesMeshes[i]);
+        meshes[i].Mesh::draw(shader, camera, shType, matricesMeshes[i]);
     }
 }
 
@@ -54,7 +53,7 @@ void Model::draw(Shader &shader)
 {
     Camera * camera = fe_getMainCamera();
     for (unsigned int i=0; i<meshes.size(); i++) {
-        meshes[i].Mesh::draw(shader, *camera, matricesMeshes[i]);
+        meshes[i].Mesh::draw(shader, *camera, shType, matricesMeshes[i]);
     }
 }
 

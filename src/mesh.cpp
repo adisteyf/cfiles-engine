@@ -5,7 +5,7 @@
 Mesh::Mesh(std::vector <Vertex>& vertices, std::vector <GLuint>& indices, std::vector <Texture>& textures, glm::vec4 objc)
 {
     Mesh::vertices = vertices;
-    Mesh::indices = indices;
+    Mesh::indices  = indices;
     Mesh::textures = textures;
     Mesh::objColor = objc;
 
@@ -42,6 +42,7 @@ void Mesh::draw
 (
     Shader& shader,
     Camera& camera,
+    int shType,
     glm::mat4 matrix,
     glm::vec3 translation,
     glm::quat rotation,
@@ -65,6 +66,7 @@ void Mesh::draw
 
         textures[i].texUnit(shader, (type + num).c_str(), i);
         shader.setUniform("objColor", objColor);
+        shader.setUniform("shaderType", shType);
         textures[i].bind();
     }
 

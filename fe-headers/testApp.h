@@ -1,4 +1,8 @@
+#ifndef FE_TEST_APP_
+#define FE_TEST_APP_
+
 #include "FBO.h"
+#include "camera.h"
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "input.h"
@@ -14,6 +18,7 @@ public:
     void cycle(void);
     void free(void);
     void winresize_callback(GLFWwindow* window, int width, int height);
+    void input_callback(Window * window, Camera &cam);
 
 private:
     Input  * input;
@@ -23,4 +28,7 @@ private:
     TextRenderer * txtRenderer;
     Window * window;
     Camera * camera;
+    bool     firstClick;
 };
+
+#endif // FE_TEST_APP_

@@ -43,6 +43,7 @@ uniform vec4 objColor;
 uniform vec4 lightColor;
 uniform vec3 lightPos;
 uniform vec3 camPos;
+uniform int  shaderType;
 
 vec4 pointLight() {
    vec3 lightVec = lightPos - FragPos;
@@ -94,10 +95,21 @@ vec4 directionalLight() {
         texColor = objColor;
         texColor2 = objColor;
     }
-    
-    vec4 result = (texColor * (diff + ambient) + texColor2.r * specular) * lightColor;
 
+    vec4 result = (texColor * (diff + ambient) + texColor2.r * specular) * lightColor;
     return result;
+}
+
+vec4 noShadow()
+{
+    vec4 texColor;
+    if (objColor.a == 0.0f) {
+        texColor = texture(diffuse0, ourTexCoord);
+    } else {
+        texColor = objColor;
+    }
+
+    return texColor;
 }
 
 vec4 spotLight()
@@ -141,7 +153,16 @@ float logisticDepth(float depth)
 
 void main()
 {
-    //FragColor = spotLight();
     float depth = logisticDepth(gl_FragCoord.z);
-    FragColor = directionalLight() * (1.0f - depth) + vec4(depth * vec3(0.85f, 0.85f, 0.90f), 1.0f);
+    switch (shaderType) {
+        case 0:
+            FragColor = noShadow();
+            break;
+        case 1:
+            FragColor = directionalLight() * (1.0f - depth) + vec4(depth * vec3(0.85f, 0.85f, 0.90f), 1.0f);
+            break;
+        case 2:
+            FragColor = spotLight();
+            break;
+    }
 }

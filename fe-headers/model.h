@@ -27,6 +27,7 @@ public:
     void changePos(glm::vec3 newPos);
     std::vector<Mesh> meshes;
     std::vector<glm::vec3> translationMeshes;
+    int shType = 1;
 private:
     const char * file;
     std::vector<unsigned char> data;
