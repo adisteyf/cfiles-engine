@@ -32,6 +32,7 @@ FeTestApp::FeTestApp(void)
     mainCamera = camera;
     Model * model  = new Model("assets/models/vec3arr/scene.gltf");
     Model * model1 = new Model("assets/models/sword/scene.gltf");
+    model->shType = 0;
 
     glfwSetWindowUserPointer(window->getWindow(), camera);
     setupImGui(window->getWindow());
