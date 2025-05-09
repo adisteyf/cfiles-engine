@@ -57,6 +57,9 @@
 #define FE_FREE_SCRIPTS \
     fe_test->free();
 
+#define FE_INPUT_SCRIPTS \
+    fe_test->input_callback(window,cam);
+
 #define FE_WINRESIZE_SCRIPTS
 //    fe_test->winresize_callback(window, width, height);
 
