@@ -1,6 +1,6 @@
 #include "window.h"
 #include "fe-settings.h"
-#include "testApp.h"
+#include "fe-includes.h"
 #include "main.h"
 
 Window::Window(int w, int h, const char* t) : width(w), height(h), title(t)
