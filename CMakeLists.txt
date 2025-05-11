@@ -8,9 +8,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g -fPIE")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # src
-file(GLOB_RECURSE SRCS src/*.cpp src/*.c)
-file(GLOB_RECURSE HEADERS fe-headers/* include/*)
-
+file(GLOB_RECURSE SRCS src/*.cpp src/*.c "cfe-*/src/*")
+file(GLOB SCRIPT_INCS "cfe-*/include")
 
 # compile fe-logic (in zig)
 execute_process(
@@ -44,16 +43,13 @@ target_link_libraries(main imgui)
 find_package(Freetype REQUIRED)
 target_link_libraries(main Freetype::Freetype)
 
-
-## ZigFe-logic
-#target_link_libraries(main felogic)
-
 # headers
 include_directories(
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/fe-headers
+  ${CMAKE_SOURCE_DIR}/include
+  ${CMAKE_SOURCE_DIR}/fe-headers
+  ${SCRIPT_INCS}
 )
-
+message(STATUS "INCS:::::: ${SCRIPT_INCS}")
 
 
 file(COPY "${CMAKE_SOURCE_DIR}/shaders" DESTINATION "${CMAKE_BINARY_DIR}")
