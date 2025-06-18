@@ -9,7 +9,7 @@
 #define WINDOW_HEIGHT 800
 #define FE_CLEARCOLOR 0.34f, 0.6f, 1.0f, 1.f
 
-#define LOG_LEVEL_INFO
+//#define LOG_LEVEL_INFO
 
 #define FE_GLFW_MAJOR 4
 #define FE_GLFW_MINOR 3

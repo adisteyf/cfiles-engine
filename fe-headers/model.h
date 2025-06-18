@@ -28,6 +28,7 @@ public:
     std::vector<Mesh> meshes;
     std::vector<glm::vec3> translationMeshes;
     int shType = 1;
+    bool enablePicking = false;
 private:
     const char * file;
     std::vector<unsigned char> data;

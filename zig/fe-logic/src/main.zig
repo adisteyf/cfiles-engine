@@ -50,6 +50,10 @@ pub export fn drawModels(shptr: *c_void) void {
     }
 }
 
+pub export fn drawModel(index: usize, shptr: *c_void) void {
+    drawModelC(model_list.items[index], shptr);
+}
+
 pub export fn getModelsLen() usize {
     return model_list.items.len;
 }
