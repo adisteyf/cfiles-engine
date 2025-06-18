@@ -19,7 +19,7 @@ uniform mat4 scale;
 
 void main()
 {
-   FragPos = vec3(model * translation * -rotation * scale * vec4(aPos, 1.0));
+   FragPos = vec3(model * translation * rotation * scale * vec4(aPos, 1.0));
    Normal = aNormal;
    
    ourColor = aColor;
