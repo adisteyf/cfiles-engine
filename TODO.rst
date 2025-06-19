@@ -17,3 +17,4 @@ v0.4.0
 - ⬜️ Add **Bullet Physics**
 - ⬜️ Add **fe-tch**
 - ⬜️ Add **console**
+- ⬜️ Add **colorPicking callback**

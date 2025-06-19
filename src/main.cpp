@@ -63,8 +63,6 @@ void drawFboPicking() {
     fboPicking->bind();
     window->clearBlack();
     pickingShader->bind();
-    //fboPicking->setModelID(*pickingShader, 2u);
-    //drawModels(pickingShader);
 
     uint len = getModelsLen();
     for (uint i=0; i<len; ++i) {
