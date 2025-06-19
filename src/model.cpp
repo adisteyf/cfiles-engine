@@ -10,6 +10,11 @@
 #include <ostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+
+
+std::vector<uint64_t> ids;
+
 
 Model::Model(const char * file)
 {
@@ -27,6 +32,27 @@ Model::Model(const char * file)
 
     for (uint i=0; i<JSON["scenes"][0]["nodes"].size(); ++i) {
         traverseNode(JSON["scenes"][0]["nodes"][i]);
+    }
+
+    /* generate id */
+    uint32_t i=0;
+    if (!ids.empty()) {
+        while (std::find(ids.begin(), ids.end(), i) != ids.end()) { ++i; }
+    }
+
+    ids.push_back(i);
+    id = i;
+}
+
+Model::~Model() {
+    /* if program is about to terminate */
+    if (!ids.empty()) {
+        for (int32_t i=0; i<ids.size(); ++i) {
+            if (ids[i] == id) {
+                ids.erase(ids.begin()+i);
+                break;
+            }
+        }
     }
 }
 

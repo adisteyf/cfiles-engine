@@ -18,3 +18,4 @@ v0.4.0
 - ⬜️ Add **fe-tch**
 - ⬜️ Add **console**
 - ⬜️ Add **colorPicking callback**
+- ✅ Add **model id**

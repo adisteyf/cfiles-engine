@@ -21,6 +21,7 @@ using json = nlohmann::json;
 class Model {
 public:
     Model(const char * name);
+    ~Model();
     void draw(Shader &shader, Camera &camera);
     void draw(Shader &shader);
     void drawMesh(Shader &shader, Camera &camera, uint index);
@@ -28,9 +29,11 @@ public:
     void changePos(glm::vec3 newPos);
     std::vector<Mesh> meshes;
     std::vector<glm::vec3> translationMeshes;
-    int shType = 1;
-    uint enablePicking = 0;
+    uint64_t getId(void) { return id; }
+    int shType = 1;          /* shader type */
+    uint enablePicking = 0;  /* picking id  */
 private:
+    uint64_t id;
     const char * file;
     std::vector<unsigned char> data;
     json JSON;
