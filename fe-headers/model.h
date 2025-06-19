@@ -23,12 +23,13 @@ public:
     Model(const char * name);
     void draw(Shader &shader, Camera &camera);
     void draw(Shader &shader);
+    void drawMesh(Shader &shader, Camera &camera, uint index);
     std::string get_file_contents(const char* filename);
     void changePos(glm::vec3 newPos);
     std::vector<Mesh> meshes;
     std::vector<glm::vec3> translationMeshes;
     int shType = 1;
-    bool enablePicking = false;
+    uint enablePicking = 0;
 private:
     const char * file;
     std::vector<unsigned char> data;

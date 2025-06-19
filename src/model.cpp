@@ -49,6 +49,11 @@ void Model::draw(Shader &shader, Camera &camera)
     }
 }
 
+void Model::drawMesh(Shader &shader, Camera &camera, uint index)
+{
+    meshes[index].Mesh::draw(shader, camera, shType, matricesMeshes[index]);
+}
+
 void Model::draw(Shader &shader)
 {
     Camera * camera = fe_getMainCamera();

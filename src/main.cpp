@@ -68,8 +68,18 @@ void drawFboPicking() {
 
     uint len = getModelsLen();
     for (uint i=0; i<len; ++i) {
-        if (!getModel(i)->enablePicking) { continue; }
-        fboPicking->setModelID(*pickingShader, i+1);
+        if (!getModel(i)->enablePicking) {
+            for (uint j=0; j<getModel(i)->meshes.size(); ++j) {
+                if (!getModel(i)->meshes[j].enablePicking) { continue; }
+
+                fboPicking->setModelID(*pickingShader, getModel(i)->meshes[j].enablePicking);
+                getModel(i)->drawMesh(*pickingShader, *mainCamera, j);
+            }
+
+            continue;
+        }
+
+        fboPicking->setModelID(*pickingShader, getModel(i)->enablePicking);
         drawModel(i, pickingShader);
     }
 

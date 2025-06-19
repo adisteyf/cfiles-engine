@@ -14,6 +14,7 @@ public:
     std::vector<GLuint> indices;
     std::vector<Texture> textures;
     glm::vec4 objColor = glm::vec4(0.f,0.f,0.f,0.f);
+    uint enablePicking = 0;
 
     VAO vao;
 
