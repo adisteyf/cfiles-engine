@@ -7,6 +7,7 @@
 #include <glm/ext/quaternion_common.hpp>
 #include <glm/fwd.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -70,6 +71,7 @@ void Model::changePos(glm::vec3 newPos)
 
 void Model::draw(Shader &shader, Camera &camera)
 {
+    shader.setUniform("worldPos", pos);
     for (unsigned int i=0; i<meshes.size(); i++) {
         meshes[i].Mesh::draw(shader, camera, shType, matricesMeshes[i]);
     }
@@ -83,9 +85,7 @@ void Model::drawMesh(Shader &shader, Camera &camera, uint index)
 void Model::draw(Shader &shader)
 {
     Camera * camera = fe_getMainCamera();
-    for (unsigned int i=0; i<meshes.size(); i++) {
-        meshes[i].Mesh::draw(shader, *camera, shType, matricesMeshes[i]);
-    }
+    Model::draw(shader, *camera);
 }
 
 std::string Model::get_file_contents(const char* filename)

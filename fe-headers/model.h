@@ -32,6 +32,8 @@ public:
     uint64_t getId(void) { return id; }
     int shType = 1;          /* shader type */
     uint enablePicking = 0;  /* picking id  */
+
+    glm::vec3 pos = glm::vec3(0,0,0);
 private:
     uint64_t id;
     const char * file;

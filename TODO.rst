@@ -13,9 +13,11 @@ None - ⬜️
 v0.4.0
 ------
 
-- ⬜️ Add color-picking capabillity for every mesh of 3D model
+- ✅ Add color-picking capabillity for every mesh of 3D model
+- ⬜️ Fix **3D coordinates**
 - ⬜️ Add **Bullet Physics**
 - ⬜️ Add **fe-tch**
-- ⬜️ Add **console**
-- ⬜️ Add **colorPicking callback**
+- ✅ Add **console**
+- ⬜️ Fix **FreeType text**
 - ✅ Add **model id**
+- ⬜️ Fix **bug when opening the imgui**
