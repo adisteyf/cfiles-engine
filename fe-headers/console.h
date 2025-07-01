@@ -17,8 +17,6 @@ public:
 
   std::ostringstream oss;
   std::istringstream iss;
-	bool work = true;
-	std::thread t;
 };
 
 #endif // __FE_CONSOLE

@@ -16,7 +16,6 @@ Console::Console(void) {
 }
 
 Console::~Console() {
-	work = false;
   std::cout.rdbuf(origCoutBuff);
   std::cin.rdbuf(origCinBuff);
 }
