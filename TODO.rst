@@ -14,7 +14,7 @@ v0.4.0
 ------
 
 - ✅ Add color-picking capabillity for every mesh of 3D model
-- ⬜️ Fix **3D coordinates**
+- ✅ Fix **3D coordinates**
 - ⬜️ Add **Bullet Physics**
 - ⬜️ Add **fe-tch**
 - ✅ Add **console**

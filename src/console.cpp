@@ -16,6 +16,7 @@ Console::Console(void) {
 }
 
 Console::~Console() {
+	work = false;
   std::cout.rdbuf(origCoutBuff);
   std::cin.rdbuf(origCinBuff);
 }
@@ -25,4 +26,18 @@ void Console::input(std::string input) {
   iss.clear();
   iss.seekg(0);
   std::cin.rdbuf(iss.rdbuf()); /* new buff */
+
+	this->process_input();
 }
+
+void Console::process_input() {
+//	while (Console::work) {
+		std::string cmd;
+		getline(std::cin, cmd);
+		std::cout << cmd << std::endl;
+//	}
+}
+
+//void Console::start_thread() {
+//	this->t = std::thread([this]() { this->process_input(); });
+//}
