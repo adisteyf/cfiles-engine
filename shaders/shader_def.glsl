@@ -15,11 +15,12 @@ uniform mat4 model;
 uniform mat4 translation;
 uniform mat4 rotation;
 uniform mat4 scale;
-
+uniform vec3 worldPos;
 
 void main()
 {
-   FragPos = vec3(model * translation * rotation * scale * vec4(aPos, 1.0));
+   FragPos = vec3(model * translation * rotation * scale * vec4(aPos, 1.0)) + worldPos;
+   
    Normal = aNormal;
    ourColor = aColor;
    ourTexCoord = aTexCoord;

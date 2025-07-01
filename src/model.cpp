@@ -7,9 +7,15 @@
 #include <glm/ext/quaternion_common.hpp>
 #include <glm/fwd.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <ostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+
+
+std::vector<uint64_t> ids;
+
 
 Model::Model(const char * file)
 {
@@ -28,6 +34,27 @@ Model::Model(const char * file)
     for (uint i=0; i<JSON["scenes"][0]["nodes"].size(); ++i) {
         traverseNode(JSON["scenes"][0]["nodes"][i]);
     }
+
+    /* generate id */
+    uint32_t i=0;
+    if (!ids.empty()) {
+        while (std::find(ids.begin(), ids.end(), i) != ids.end()) { ++i; }
+    }
+
+    ids.push_back(i);
+    id = i;
+}
+
+Model::~Model() {
+    /* if program is about to terminate */
+    if (!ids.empty()) {
+        for (int32_t i=0; i<ids.size(); ++i) {
+            if (ids[i] == id) {
+                ids.erase(ids.begin()+i);
+                break;
+            }
+        }
+    }
 }
 
 void Model::changePos(glm::vec3 newPos)
@@ -44,17 +71,21 @@ void Model::changePos(glm::vec3 newPos)
 
 void Model::draw(Shader &shader, Camera &camera)
 {
+    shader.setUniform("worldPos", pos);
     for (unsigned int i=0; i<meshes.size(); i++) {
         meshes[i].Mesh::draw(shader, camera, shType, matricesMeshes[i]);
     }
 }
 
+void Model::drawMesh(Shader &shader, Camera &camera, uint index)
+{
+    meshes[index].Mesh::draw(shader, camera, shType, matricesMeshes[index]);
+}
+
 void Model::draw(Shader &shader)
 {
     Camera * camera = fe_getMainCamera();
-    for (unsigned int i=0; i<meshes.size(); i++) {
-        meshes[i].Mesh::draw(shader, *camera, shType, matricesMeshes[i]);
-    }
+    Model::draw(shader, *camera);
 }
 
 std::string Model::get_file_contents(const char* filename)
