@@ -11,6 +11,7 @@ const c = @cImport({
 
 pub extern fn deleteModelC(modelptr: *c_void) void;
 pub extern fn drawModelC(ptr: *c_void, shptr: *c_void) void;
+pub extern fn drawModelOneColorC(ptr: *c_void, shptr: *c_void, dcolor: *[4]f32) void;
 pub export fn zigGreetings() void {
     print("hello from zig!\n", .{});
 }
@@ -47,6 +48,12 @@ pub export fn deleteModels() void {
 pub export fn drawModels(shptr: *c_void) void {
     for (model_list.items) |model| {
         drawModelC(model, shptr);
+    }
+}
+
+pub export fn drawModelsOneColor(shptr: *c_void, dcolor: *[4]f32) void {
+    for (model_list.items) |model| {
+        drawModelOneColorC(model, shptr, dcolor);
     }
 }
 

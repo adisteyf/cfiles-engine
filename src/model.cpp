@@ -72,14 +72,15 @@ void Model::changePos(glm::vec3 newPos)
 void Model::draw(Shader &shader, Camera &camera, glm::vec4 globalColor)
 {
     shader.setUniform("worldPos", pos);
+		std::cout << "model globalColor " << globalColor.r << std::endl;
     for (unsigned int i=0; i<meshes.size(); i++) {
-        meshes[i].Mesh::draw(shader, camera, shType, matricesMeshes[i], globalColor);
+        meshes[i].Mesh::draw(shader, camera, shType, globalColor, matricesMeshes[i]);
     }
 }
 
-void Model::drawMesh(Shader &shader, Camera &camera, uint index)
+void Model::drawMesh(Shader &shader, Camera &camera, uint index) /* TODO: add globalColor arg */
 {
-    meshes[index].Mesh::draw(shader, camera, shType, matricesMeshes[index]);
+    meshes[index].Mesh::draw(shader, camera, shType, glm::vec4(0.f,0.f,0.f,0.f), matricesMeshes[index]);
 }
 
 void Model::draw(Shader &shader, float dcolor[4])
