@@ -1,5 +1,6 @@
 #include "console.h"
 #include <iostream>
+#include <vector>
 #include <sstream>
 #include <streambuf>
 
@@ -29,11 +30,52 @@ void Console::input(std::string input) {
 	this->process_input();
 }
 
+std::vector<std::string> Console::split_args(const std::string &input) {
+	std::vector<std::string> res;
+	std::string crt;
+	bool inQuotes = false;
+
+	for (int i=0; i<input.size(); ++i) {
+		char c = input[i];
+
+		switch (c) {
+			case '\"':
+				inQuotes = !inQuotes;
+				break;
+			case ' ':
+				if (!inQuotes && !crt.empty()) {
+					res.push_back(crt);
+					crt.clear();
+				}
+				break;
+			case '\\':
+				if (i + 1 < input.size() && (input[i + 1] == '\"' || input[i + 1] == '\\')) {
+						crt += input[i+1]; i++;
+				}
+				break;
+
+			default:
+				crt += c;
+		}
+	}
+
+	if (!crt.empty()) { res.push_back(crt); }
+	return res;
+}
+
 void Console::process_input() {
 //	while (Console::work) {
 		std::string cmd;
 		getline(std::cin, cmd);
-		std::cout << cmd << std::endl;
+		std::vector<std::string> args = split_args(cmd);
+
+		if (args[0] == "echo" && args.size() > 1) {
+			std::cout << args[1] << std::endl;
+		}
+
+		if (args[0] == "fe-tch") {
+			std::cout << "fe-tch command" << std::endl;
+		}
 //	}
 }
 

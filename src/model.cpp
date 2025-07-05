@@ -69,11 +69,11 @@ void Model::changePos(glm::vec3 newPos)
     position = newPos;
 } // TODO: доделать
 
-void Model::draw(Shader &shader, Camera &camera)
+void Model::draw(Shader &shader, Camera &camera, glm::vec4 globalColor)
 {
     shader.setUniform("worldPos", pos);
     for (unsigned int i=0; i<meshes.size(); i++) {
-        meshes[i].Mesh::draw(shader, camera, shType, matricesMeshes[i]);
+        meshes[i].Mesh::draw(shader, camera, shType, matricesMeshes[i], globalColor);
     }
 }
 
@@ -82,10 +82,12 @@ void Model::drawMesh(Shader &shader, Camera &camera, uint index)
     meshes[index].Mesh::draw(shader, camera, shType, matricesMeshes[index]);
 }
 
-void Model::draw(Shader &shader)
+void Model::draw(Shader &shader, float dcolor[4])
 {
     Camera * camera = fe_getMainCamera();
-    Model::draw(shader, *camera);
+
+		glm::vec4 dcolorvec4(dcolor[0], dcolor[1], dcolor[2], dcolor[3]);
+    Model::draw(shader, *camera, (dcolor[3] == 0.f) ? glm::vec4(0.f,0.f,0.f,0.f) : dcolorvec4);
 }
 
 std::string Model::get_file_contents(const char* filename)
@@ -460,5 +462,11 @@ extern "C" {
     Model  * mdl = (Model *)ptr;
     Shader * sdr = (Shader *)shptr;
     mdl->draw(*sdr);
+  }
+
+  void drawModelOneColorC(void * ptr, void * shptr, float dcolor[4]) {
+    Model  * mdl = (Model *)ptr;
+    Shader * sdr = (Shader *)shptr;
+    mdl->draw(*sdr, dcolor);
   }
 }

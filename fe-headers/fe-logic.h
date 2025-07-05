@@ -10,8 +10,9 @@ extern "C" {
   Model * getModel (size_t index);
   void    deleteModels ();
   size_t  getModelsLen ();
-  void    drawModels (void * shptr);
-  void    drawModel  (size_t index, void * shptr);
+  void    drawModels         (void * shptr);
+	void    drawModelsOneColor (void * shptr, float dcolor[4]);
+  void    drawModel          (size_t index, void * shptr);
 }
 
 #endif // FE_LOGIC

@@ -46,7 +46,8 @@ void Mesh::draw
     glm::mat4 matrix,
     glm::vec3 translation,
     glm::quat rotation,
-    glm::vec3 scale
+    glm::vec3 scale,
+		glm::vec4 customObjColor
 )
 {
     shader.bind();
@@ -65,7 +66,7 @@ void Mesh::draw
         }
 
         textures[i].texUnit(shader, (type + num).c_str(), i);
-        shader.setUniform("objColor", objColor);
+        shader.setUniform("objColor", (objColor.a == 0) ? customObjColor : objColor);
         shader.setUniform("shaderType", shType);
         textures[i].bind();
     }

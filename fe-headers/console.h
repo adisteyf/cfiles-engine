@@ -2,6 +2,7 @@
 #define __FE_CONSOLE
 
 #include <sstream>
+#include <vector>
 #include <thread>
 
 
@@ -10,6 +11,9 @@ class Console
 public:
   Console();
   ~Console();
+
+
+	std::vector<std::string> split_args(const std::string &input);
 
   void input(std::string input);
 	void process_input();

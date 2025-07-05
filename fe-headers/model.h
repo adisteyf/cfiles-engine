@@ -22,8 +22,8 @@ class Model {
 public:
     Model(const char * name);
     ~Model();
-    void draw(Shader &shader, Camera &camera);
-    void draw(Shader &shader);
+    void draw(Shader &shader, Camera &camera, glm::vec4 globalColor = glm::vec4(0.f,0.f,0.f,0.f));
+    void draw(Shader &shader, float dcolor[4] = 0);
     void drawMesh(Shader &shader, Camera &camera, uint index);
     std::string get_file_contents(const char* filename);
     void changePos(glm::vec3 newPos);
