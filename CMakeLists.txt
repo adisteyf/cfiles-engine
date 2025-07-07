@@ -50,6 +50,7 @@ target_link_libraries(main BulletDynamics BulletCollision LinearMath)
 # headers
 include_directories(
   ${CMAKE_SOURCE_DIR}/include
+	${CMAKE_SOURCE_DIR}/include/bullet
   ${CMAKE_SOURCE_DIR}/fe-headers
   ${SCRIPT_INCS}
 )
