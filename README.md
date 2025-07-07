@@ -27,11 +27,16 @@ This is a simple engine for creating and rendering 3D objects using OpenGL.
 
 # Dependencies
 
-- OpenGL
-- GLFW
-- GLAD
-- GLM
-- GLU
+Needed to be installed from the your system's **package manager**.
+
+- OpenGL (`OpenGL`)
+- GLFW (`glfw3`)
+- GLAD (`glad`)
+- GLM (`glm`)
+- GLU (`glu`)
+- ImGui (`imgui`)
+- FreeType (`Freetype`)
+- BulletPhysics (`Bullet`)
 
 #
 

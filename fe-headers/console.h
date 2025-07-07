@@ -5,7 +5,6 @@
 #include <vector>
 #include <thread>
 
-
 class Console
 {
 public:
@@ -18,6 +17,8 @@ public:
   void input(std::string input);
 	void process_input();
 	void start_thread();
+	void set_int(std::vector<std::string> args, int *var);
+	void set_bool(std::vector<std::string> args, bool *var);
 
   std::ostringstream oss;
   std::istringstream iss;

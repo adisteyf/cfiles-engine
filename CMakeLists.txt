@@ -43,6 +43,10 @@ target_link_libraries(main imgui)
 find_package(Freetype REQUIRED)
 target_link_libraries(main Freetype::Freetype)
 
+## BulletPhysics
+find_package(Bullet REQUIRED)
+target_link_libraries(main BulletDynamics BulletCollision LinearMath)
+
 # headers
 include_directories(
   ${CMAKE_SOURCE_DIR}/include

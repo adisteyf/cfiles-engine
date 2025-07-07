@@ -21,6 +21,7 @@
 #include "textRenderer.h"
 #include "scriptManager.h"
 #include "fe-includes.h"
+#include "fe-commands.h"
 
 /* ImGui */
 #include "imgui.h"
@@ -40,7 +41,8 @@ Shader * outlineShader = nullptr;
 Window * window        = nullptr;
 Input  * input         = nullptr;
 Camera * mainCamera    = nullptr;
-int      wireframe_len = 5;
+
+extern fe_rd rd;
 FE_SCRIPTS
 
 Shader* fe_getShader(int type)
@@ -180,15 +182,19 @@ void fe_main()
         mainCamera->updateMatrix();
         drawFboPicking();
         shader->bind();
-				
-				glColor3f(1.f, 1.f, 1.f);
-				glLineWidth(wireframe_len);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-				float dcolor[4] = {1.f, 1.f, 1.f, 1.f};
-        drawModelsOneColor(shader, dcolor);
+				drawModels(shader);
+				if (rd.wireframe) {
+					glColor3f(1.f, 1.f, 1.f);
+					glLineWidth(rd.wireframe_len);
+					glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+					float dcolor[4] = {1.f, 1.f, 1.f, 1.f};
+					drawModelsOneColor(shader, dcolor);
+
+					glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				}
+
         FE_CYCLE_SCRIPTS
 
         felog("fe_main(): swapping buffers...");

@@ -3,6 +3,7 @@
 #include <vector>
 #include <sstream>
 #include <streambuf>
+#include "fe-commands.h"
 
 std::streambuf * origCoutBuff;
 std::streambuf * origCinBuff;
@@ -30,7 +31,7 @@ void Console::input(std::string input) {
 	this->process_input();
 }
 
-std::vector<std::string> Console::split_args(const std::string &input) {
+std::vector<std::string> Console::split_args(const std::string &input) { /* FIXME: Bad " and \ */
 	std::vector<std::string> res;
 	std::string crt;
 	bool inQuotes = false;
@@ -63,6 +64,39 @@ std::vector<std::string> Console::split_args(const std::string &input) {
 	return res;
 }
 
+void Console::set_bool(std::vector<std::string> args, bool *var) {
+		if (args.size() != 2) {
+			std::string err = (args.size() > 2) ? "Too many args." : "Too few args.";
+			std::cout << err << std::endl;
+			return;
+		}
+		
+		if (args[1] == "0" || args[1] == "false") { *var = false; return; }
+		if (args[1] == "1" || args[1] == "true")  { *var = true;  return; }
+
+		std::cout << "invalid value. (1/0/true/false)" << std::endl;
+}
+
+void Console::set_int(std::vector<std::string> args, int *var) {
+	if (args.size() != 2) {
+		std::string err = (args.size() > 2) ? "Too many args." : "Too few args.";
+		std::cout << err << std::endl;
+		return;
+	}
+
+	int res;
+
+	try {
+		res = std::stoi(args[1]);
+	}
+
+	catch (const std::invalid_argument &e) { return; }
+	catch (const std::out_of_range &e)     { return; }
+
+	*var = res;
+}
+
+extern fe_rd rd;
 void Console::process_input() {
 //	while (Console::work) {
 		std::string cmd;
@@ -71,11 +105,23 @@ void Console::process_input() {
 
 		if (args[0] == "echo" && args.size() > 1) {
 			std::cout << args[1] << std::endl;
+			return;
 		}
 
 		if (args[0] == "fe-tch") {
 			std::cout << "fe-tch command" << std::endl;
+			return;
 		}
+
+		/* rd. tier */
+		if (args[0] == "rd.wireframe") {
+			return set_bool(args, &rd.wireframe);
+		}
+
+		if (args[0] == "rd.wireframe_len") {
+			return set_int(args, &rd.wireframe_len);
+		}
+
 //	}
 }
 

@@ -66,8 +66,6 @@ void Mesh::draw
         }
 
         textures[i].texUnit(shader, (type + num).c_str(), i);
-				std::cout << "objColor.a == " << objColor.a << std::endl;
-				std::cout << "customObjColor.r == " << customObjColor.r << std::endl;
         shader.setUniform("objColor", (customObjColor.a == 0) ? objColor : customObjColor);
         shader.setUniform("shaderType", shType);
         textures[i].bind();

@@ -72,7 +72,6 @@ void Model::changePos(glm::vec3 newPos)
 void Model::draw(Shader &shader, Camera &camera, glm::vec4 globalColor)
 {
     shader.setUniform("worldPos", pos);
-		std::cout << "model globalColor " << globalColor.r << std::endl;
     for (unsigned int i=0; i<meshes.size(); i++) {
         meshes[i].Mesh::draw(shader, camera, shType, globalColor, matricesMeshes[i]);
     }
@@ -462,7 +461,7 @@ extern "C" {
   void drawModelC(void * ptr, void * shptr) {
     Model  * mdl = (Model *)ptr;
     Shader * sdr = (Shader *)shptr;
-    mdl->draw(*sdr);
+    mdl->draw(*sdr, (float[]){0.f,0.f,0.f,0.f});
   }
 
   void drawModelOneColorC(void * ptr, void * shptr, float dcolor[4]) {
