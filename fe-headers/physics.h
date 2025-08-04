@@ -21,14 +21,16 @@ public:
 	~Physics();
 
 	void simulate(double dt);
-	void createStaticShape(glm::vec3 *transform, physx::PxBounds3 collision, glm::vec3 material);
-	void createDynamicShape(glm::vec3 *transform, physx::PxBounds3 collision, glm::vec3 material);
-	//void * createAABB(double min[3], double max[3]);
+	int32_t createStaticShape(glm::vec3 *transform, int32_t collisionID, glm::vec3 material);
+	int32_t createDynamicShape(glm::vec3 *transform, int32_t collisionID, glm::vec3 material);
+	int32_t createAABB(double min[3], double max[3]);
 	void setMass(int actorID, float m);
+	glm::vec3 getGlobalPos(int32_t rgID, bool isDynamic);
 private:
 	std::vector<physx::PxShape *> shapevec;
 	std::vector<physx::PxRigidDynamic *> dactorvec;
 	std::vector<physx::PxRigidStatic *> sactorvec;
+	std::vector<physx::PxBounds3> collisions;
 };
 
 #endif // __FE_PHYSICS

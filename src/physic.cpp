@@ -48,16 +48,19 @@ void Physics::simulate(double dt)
 	mScene->fetchResults(true);
 }
 
-/*void * Physics::createAABB(double min[3], double max[3])
+int32_t Physics::createAABB(double min[3], double max[3])
 {
 	physx::PxVec3 minB(min[0], min[1], min[2]);
 	physx::PxVec3 maxB(max[0], max[1], max[2]);
 	physx::PxBounds3 aabb(minB, maxB);
-	return aabb;
-}*/
 
-void Physics::createStaticShape(glm::vec3 *transform, physx::PxBounds3 collision, glm::vec3 material)
+	collisions.push_back(aabb);
+	return collisions.size()-1;
+}
+
+int32_t Physics::createStaticShape(glm::vec3 *transform, int32_t collisionID, glm::vec3 material)
 {
+	physx::PxBounds3 collision = collisions[collisionID];
 	physx::PxTransform pxt(transform->x, transform->y, transform->z);
 	physx::PxShape *shape;
 	physx::PxRigidStatic *actor = mPhysics->createRigidStatic(pxt);
@@ -67,9 +70,11 @@ void Physics::createStaticShape(glm::vec3 *transform, physx::PxBounds3 collision
 	actor->attachShape(*shape);
 	shapevec.push_back(shape);
 	sactorvec.push_back(actor);
+
+	return shapevec.size()-1;
 }
 
-void Physics::createDynamicShape(glm::vec3 *transform, physx::PxBounds3 collision, glm::vec3 material)
+int32_t Physics::createDynamicShape(glm::vec3 *transform, physx::PxBounds3 collision, glm::vec3 material)
 {
 	physx::PxTransform pxt(transform->x, transform->y, transform->z);
 	physx::PxShape *shape;
@@ -80,10 +85,27 @@ void Physics::createDynamicShape(glm::vec3 *transform, physx::PxBounds3 collisio
 	actor->attachShape(*shape);
 	shapevec.push_back(shape);
 	dactorvec.push_back(actor);
+
+	return shapevec.size()-1;
 }
 
 void Physics::setMass(int actorID, float m) {
 	dactorvec[actorID]->setMass(m);
+}
+
+glm::vec3 Physics::getGlobalPos(int32_t rgID, bool isDynamic)
+{
+	if (isDynamic) {
+		physx::PxTransform transform = dactorvec[rgID]->getGlobalPose();
+		physx::PxVec3 position       = transform.p;
+
+		return glm::vec3(position.x, position.y, position.z);
+	}
+
+	physx::PxTransform transform = sactorvec[rgID]->getGlobalPose();
+	physx::PxVec3 position       = transform.p;
+
+	return glm::vec3(position.x, position.y, position.z);
 }
 
 Physics::~Physics()

@@ -40,6 +40,7 @@ private:
     std::vector<unsigned char> data;
     json JSON;
     bool reverseRot = true;
+		int32_t rgid; /* RigidBody ID */
 
     glm::vec3 position = glm::vec3(0.f,0.f,0.f);
     std::vector<glm::quat> rotationsMeshes;

@@ -1,5 +1,7 @@
 # Files Engine in C/C++
 
+> [!WARNING]
+> This project [has migrated to Codeberg](https://codeberg.org/vkchs_cooks/cfiles-engine).
 
 <p align="center">
     <img src="https://github.com/shawarmateam/cfiles-engine/blob/main/assets/textures/logo200x200.png" alt="logo" width="200">
